@@ -4,8 +4,10 @@ import BackToTop from '@/components/BackToTop.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import GitHubRepos from '@/components/GitHubRepos.vue'
 import { onMounted, ref } from 'vue'
+import { getOptions } from '@/utils/options.ts'
 
 const githubSearch = ref<InstanceType<typeof GitHubRepos> | null>(null)
+const expandedRows = ref(10)
 
 function handleKeyboard(e: KeyboardEvent) {
   if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) return
@@ -18,8 +20,11 @@ function handleKeyboard(e: KeyboardEvent) {
   githubSearch.value?.focusSearch(e.key)
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleKeyboard)
+  const options = await getOptions()
+  console.log('expandedRows:', options.expandedRows)
+  expandedRows.value = options.expandedRows
 })
 
 // useTitle('Page')
@@ -27,7 +32,7 @@ onMounted(() => {
 
 <template>
   <header class="flex-shrink-0">
-    <SearchBox class="p-2" />
+    <SearchBox class="p-2" :expanded-rows="expandedRows" />
     <hr class="my-0" />
   </header>
 

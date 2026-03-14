@@ -8,7 +8,7 @@ const props = withDefaults(
   }>(),
   {
     closeWindow: false,
-    expandedRows: 6,
+    expandedRows: 10,
   },
 )
 

@@ -2,6 +2,7 @@ import { showToast } from '@/composables/useToast.ts'
 
 export const defaultOptions = {
   testInput: 'Default Value',
+  expandedRows: 10,
   maxResults: 10000,
   contextMenu: true,
   showUpdate: false,

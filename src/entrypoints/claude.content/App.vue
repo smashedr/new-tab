@@ -15,10 +15,16 @@ async function submitRetard() {
   if (!editor) return
 
   console.log('%c submitRetard - START', 'color: Yellow')
-  editor.textContent = claudePrompt
-  await new Promise((resolve) => setTimeout(resolve, 200))
+
+  const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  editor.innerHTML = claudePrompt
+    .split('\n')
+    .map((line) => (line.trim() === '' ? '<p><br></p>' : `<p>${escape(line)}</p>`))
+    .join('')
+
+  await new Promise((resolve) => requestAnimationFrame(resolve))
   editor.dispatchEvent(new InputEvent('input', { bubbles: true }))
-  await new Promise((resolve) => setTimeout(resolve, 200))
+  await new Promise((resolve) => requestAnimationFrame(resolve))
   editor.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
   console.log('%c submitRetard - DONE', 'color: Lime')
 }

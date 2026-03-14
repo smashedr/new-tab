@@ -35,22 +35,23 @@ onMounted(() => {
 <template>
   <form>
     <div v-if="!props.compact" class="row mb-2">
-      <div class="col-12 col-sm-8 mb-2">
-        <label for="testInput" class="form-label"><i class="fa-regular fa-keyboard me-1"></i> Test Input</label>
-        <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Example Text Input."></i>
-        <input
-          id="testInput"
-          aria-describedby="testInputHelp"
-          type="text"
-          class="form-control"
-          autocomplete="off"
-          @change="saveOptions"
-        />
-        <div class="form-text" id="testInputHelp">Just a test text input.</div>
-      </div>
-      <div class="col-12 col-sm-4 mb-2">
+      <!--<div class="col-12 col-sm-8 mb-2">-->
+      <!--  <label for="testInput" class="form-label"><i class="fa-regular fa-keyboard me-1"></i> Test Input</label>-->
+      <!--  <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Example Text Input."></i>-->
+      <!--  <input-->
+      <!--    id="testInput"-->
+      <!--    aria-describedby="testInputHelp"-->
+      <!--    type="text"-->
+      <!--    class="form-control"-->
+      <!--    autocomplete="off"-->
+      <!--    @change="saveOptions"-->
+      <!--  />-->
+      <!--  <div class="form-text" id="testInputHelp">Just a test text input.</div>-->
+      <!--</div>-->
+
+      <div class="col-12 col-sm-6 mb-2">
         <label for="maxResults" class="form-label"><i class="fa-solid fa-hashtag me-1"></i> Max History</label>
-        <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Max History to Search."></i>
+        <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Maximum Items Processed."></i>
         <input
           id="maxResults"
           aria-describedby="maxResultsHelp"
@@ -59,10 +60,27 @@ onMounted(() => {
           min="0"
           class="form-control"
           autocomplete="off"
-          placeholder="Minutes"
+          placeholder="# of Items"
           @change="saveOptions"
         />
-        <div class="form-text" id="maxResultsHelp">Max Items Processed.</div>
+        <div class="form-text" id="maxResultsHelp">Maximum Items Processed.</div>
+      </div>
+
+      <div class="col-12 col-sm-6 mb-2">
+        <label for="expandedRows" class="form-label"><i class="fa-solid fa-border-top-left"></i> Expanded Rows</label>
+        <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Search Box Expanded Rows."></i>
+        <input
+          id="expandedRows"
+          aria-describedby="expandedRowsHelp"
+          type="number"
+          step="1"
+          min="2"
+          class="form-control"
+          autocomplete="off"
+          placeholder="# of Rows"
+          @change="saveOptions"
+        />
+        <div class="form-text" id="expandedRowsHelp">Search Box Expanded Rows.</div>
       </div>
     </div>
 
