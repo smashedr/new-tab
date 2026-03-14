@@ -1,7 +1,7 @@
 import { showToast } from '@/composables/useToast.ts'
 
 export const defaultOptions = {
-  testInput: 'Default Value',
+  bgImage: 'https://picsum.photos/1920/1080',
   expandedRows: 10,
   maxResults: 10000,
   contextMenu: true,

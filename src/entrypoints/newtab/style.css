@@ -16,6 +16,6 @@ body {
 
     overflow-y: scroll;
     /*noinspection CssUnknownTarget*/
-    background: url('https://picsum.photos/1920/1080') no-repeat center fixed;
+    /*background: url('https://picsum.photos/1920/1080') no-repeat center fixed;*/
     background-size: cover;
 }

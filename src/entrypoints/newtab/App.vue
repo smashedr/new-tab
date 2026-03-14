@@ -25,6 +25,17 @@ onMounted(async () => {
   const options = await getOptions()
   console.log('expandedRows:', options.expandedRows)
   expandedRows.value = options.expandedRows
+  // if (options.bgImage) document.body.style.background = `url('${options.bgImage}') no-repeat center fixed`
+  // use browser cache
+  if (options.bgImage) {
+    await new Promise((resolve) => {
+      const img = new Image()
+      img.onload = resolve
+      img.onerror = resolve
+      img.src = options.bgImage
+    })
+    document.body.style.background = `url('${options.bgImage}') no-repeat center fixed`
+  }
 })
 
 // useTitle('Page')

@@ -35,20 +35,6 @@ onMounted(() => {
 <template>
   <form>
     <div v-if="!props.compact" class="row mb-2">
-      <!--<div class="col-12 col-sm-8 mb-2">-->
-      <!--  <label for="testInput" class="form-label"><i class="fa-regular fa-keyboard me-1"></i> Test Input</label>-->
-      <!--  <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Example Text Input."></i>-->
-      <!--  <input-->
-      <!--    id="testInput"-->
-      <!--    aria-describedby="testInputHelp"-->
-      <!--    type="text"-->
-      <!--    class="form-control"-->
-      <!--    autocomplete="off"-->
-      <!--    @change="saveOptions"-->
-      <!--  />-->
-      <!--  <div class="form-text" id="testInputHelp">Just a test text input.</div>-->
-      <!--</div>-->
-
       <div class="col-12 col-sm-6 mb-2">
         <label for="maxResults" class="form-label"><i class="fa-solid fa-hashtag me-1"></i> Max History</label>
         <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Maximum Items Processed."></i>
@@ -81,6 +67,20 @@ onMounted(() => {
           @change="saveOptions"
         />
         <div class="form-text" id="expandedRowsHelp">Search Box Expanded Rows.</div>
+      </div>
+
+      <div class="col-12 mb-2">
+        <label for="bgImage" class="form-label"><i class="fa-regular fa-image me-1"></i> Background Image URL</label>
+        <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="URL to Background Image."></i>
+        <input
+          id="bgImage"
+          aria-describedby="bgImageHelp"
+          type="text"
+          class="form-control"
+          autocomplete="off"
+          @change="saveOptions"
+        />
+        <div class="form-text" id="bgImageHelp">New Tab Background Image (blank for none).</div>
       </div>
     </div>
 
