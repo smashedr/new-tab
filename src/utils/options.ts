@@ -22,7 +22,6 @@ export async function saveOptions(event: Event) /* NOSONAR */ {
   console.debug('saveOptions:', event)
   const options = await getOptions()
   const target = event.target as HTMLInputElement
-  console.debug('target.type:', target.type)
   let key = target.id
   let value
   if (target.type === 'radio') {

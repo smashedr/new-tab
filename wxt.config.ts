@@ -28,7 +28,15 @@ export default defineConfig({
       name: 'New Tab',
       description: 'New Tab Extension.',
       homepage_url: 'https://github.com/smashedr/new-tab',
-      permissions: ['contextMenus', 'storage', 'bookmarks', 'history', 'search'],
+      permissions: [
+        'contextMenus',
+        'storage',
+        'bookmarks',
+        'history',
+        'search',
+        'topSites',
+        'favicon',
+      ],
 
       // chrome_url_overrides: {
       //   newtab: 'tab.html',

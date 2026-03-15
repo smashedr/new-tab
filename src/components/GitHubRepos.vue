@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { showToast } from '@/composables/useToast.ts'
 import { getOptions } from '@/utils/options.ts'
+import { openUrl } from '@/utils'
 
 const inputRef = ref<HTMLInputElement | null>(null)
 const repos = ref<string[]>([])
@@ -61,8 +62,6 @@ const GITHUB_RESERVED_PATHS = new Set([
   '404',
   '500',
 ])
-
-const openUrl = (url?: string) => location.replace(url!)
 
 function onInput(e: InputEvent) {
   const target = e.currentTarget as HTMLInputElement

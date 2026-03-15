@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import ToastAlerts from '@/components/ToastAlerts.vue'
-import BackToTop from '@/components/BackToTop.vue'
-import SearchBox from '@/components/SearchBox.vue'
-import GitHubRepos from '@/components/GitHubRepos.vue'
 import { onMounted, ref } from 'vue'
 import { getOptions } from '@/utils/options.ts'
+import GitHubRepos from '@/components/GitHubRepos.vue'
+import SearchBox from '@/components/SearchBox.vue'
+import ToastAlerts from '@/components/ToastAlerts.vue'
+import TopSites from '@/components/topSites.vue'
 
 const githubSearch = ref<InstanceType<typeof GitHubRepos> | null>(null)
 const expandedRows = ref(10)
@@ -43,13 +43,14 @@ onMounted(async () => {
 
 <template>
   <header class="flex-shrink-0">
-    <SearchBox class="p-2" :expanded-rows="expandedRows" />
-    <hr class="my-0" />
+    <SearchBox class="m-2" :expanded-rows="expandedRows" />
+
+    <TopSites class="m-2" />
   </header>
 
-  <main class="flex-grow-1 overflow-auto">
+  <main class="flex-grow-1 overflow-auto" style="min-height: 200px">
     <div class="container-fluid px-4 h-100">
-      <div class="d-flex align-items-center justify-content-center w-100 h-100 py-3">
+      <div class="d-flex align-items-center justify-content-center w-100 h-100 pb-3">
         <div class="glass-outline blur rounded rounded-3 my-0 mx-auto w-100 h-100 d-flex flex-column">
           <div class="p-3 flex-grow-1 overflow-auto">
             <GitHubRepos ref="githubSearch" />
@@ -65,7 +66,7 @@ onMounted(async () => {
   </footer>
 
   <ToastAlerts />
-  <BackToTop />
+  <!--<BackToTop />-->
 </template>
 
 <!--<style scoped></style>-->

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { openUrl } from '@/utils'
 
 const props = withDefaults(
   defineProps<{
@@ -19,8 +20,6 @@ console.debug('newTab:', props.newTab)
 const isFocused = ref(false)
 const containerRef = ref<HTMLElement | null>(null)
 const textRef = useTemplateRef<HTMLTextAreaElement>('textRef')
-
-const openUrl = (url?: string) => location.replace(url!)
 
 async function processForm(e: Event) {
   console.debug('processForm:', e)
@@ -84,7 +83,9 @@ onUnmounted(() => document.removeEventListener('mousedown', onDocumentMousedown)
       </div>
     </form>
     <div class="d-flex flex-wrap justify-content-center gap-2 my-2">
-      <button class="btn btn-warning" @click="retardAI"><i class="fa-solid fa-hexagon-nodes"></i> Retard AI</button>
+      <button class="btn btn-warning" @click="retardAI">
+        <i class="fa-solid fa-hexagon-nodes"></i> Retard AI (Ctrl+Enter)
+      </button>
       <button class="btn btn-success" type="submit" form="search-form">
         <i class="fa-solid fa-magnifying-glass"></i> Not AI
       </button>
