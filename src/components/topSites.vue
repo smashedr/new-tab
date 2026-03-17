@@ -6,7 +6,7 @@ import { openUrl } from '@/utils'
 const topSites = ref<browser.topSites.MostVisitedURL[] | chrome.topSites.MostVisitedURL[]>([])
 
 function getFaviconUrl(site: chrome.topSites.MostVisitedURL): string {
-  console.log('getFaviconUrl:', site)
+  // console.log('getFaviconUrl:', site)
   if (site.favicon) return site.favicon
   const url = new URL(chrome.runtime.getURL('/_favicon/'))
   url.searchParams.set('pageUrl', site.url)

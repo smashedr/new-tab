@@ -2,7 +2,7 @@ import { openExtPanel, openPopup, openSidePanel } from '@/utils/extension.ts'
 import { defaultOptions, getOptions } from '@/utils/options.ts'
 import { isFirefox } from '@/utils/system.ts'
 import { createContextMenus, onClicked } from '@/entrypoints/background/menus.ts'
-// import { onVisited, onVisitRemoved } from '@/entrypoints/background/history.ts'
+import { setDefaultSearches } from '@/utils/searches.ts'
 
 export default defineBackground(() => {
   console.log(`Loaded: ${chrome.runtime.id}`)
@@ -64,6 +64,8 @@ async function onInstalled(details: chrome.runtime.InstalledDetails) {
       }
     }
   }
+
+  setDefaultSearches().catch((e) => console.warn(e))
 }
 
 async function onStartup() {
