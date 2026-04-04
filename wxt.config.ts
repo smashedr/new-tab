@@ -1,4 +1,5 @@
 import { defineConfig } from 'wxt'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 // NOTE: Icons are also defined in <mata> tags for:
 //    popup/index.html
@@ -109,6 +110,17 @@ export default defineConfig({
 
   // https://wxt.dev/guide/essentials/config/vite.html
   vite: () => ({
+    plugins: [
+      // NOTE: For retarded icons
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'node_modules/simple-icons/icons/*.svg',
+            dest: 'si',
+          },
+        ],
+      }),
+    ],
     // NOTE: This silences bootstrap deprecation warnings
     css: {
       preprocessorOptions: {
