@@ -137,7 +137,6 @@ export function clickOpen(e: Event, close = false) {
 
 export async function hasPermissions() {
   const manifest = chrome.runtime.getManifest()
-  const host_permissions = manifest.host_permissions
-  console.debug('hasPermissions - host_permissions:', host_permissions)
-  return await chrome.permissions.contains({ origins: host_permissions })
+  console.debug('hasPermissions - origins:', manifest.host_permissions)
+  return await chrome.permissions.contains({ origins: manifest.host_permissions })
 }
