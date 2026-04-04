@@ -2,8 +2,6 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { openUrl } from '@/utils/index.ts'
 import { Search, deleteSearch, getSearches, addSearch, updateSearch } from '@/utils/searches.ts'
-import camelCase from 'camelcase'
-import * as icons from 'simple-icons'
 import claudeIcon from '@/assets/icons/claude.svg?raw'
 import SearchModal from '@/components/SearchModal.vue'
 
@@ -37,20 +35,20 @@ chrome.storage.sync.onChanged.addListener((changes) => {
   }
 })
 
-// chrome.storage.sync.onChanged.addListener(onChanged)
-// function onChanged(changes: object) {}
-
-function getIcon(slug: string) {
-  console.log('getIcon:', slug)
-  try {
-    const name = camelCase(slug, { pascalCase: true })
-    console.log('name:', name)
-    return icons[`si${name}` as keyof typeof icons]?.svg
-    // return icons[('si' + slug.charAt(0).toUpperCase() + slug.slice(1)) as keyof typeof icons].svg
-  } catch (e) {
-    return ''
-  }
-}
+// import camelCase from 'camelcase'
+// import * as icons from 'simple-icons'
+//
+// function getIcon(slug: string) {
+//   console.log('getIcon:', slug)
+//   try {
+//     const name = camelCase(slug, { pascalCase: true })
+//     console.log('name:', name)
+//     return icons[`si${name}` as keyof typeof icons]?.svg
+//     // return icons[('si' + slug.charAt(0).toUpperCase() + slug.slice(1)) as keyof typeof icons].svg
+//   } catch (e) {
+//     return ''
+//   }
+// }
 
 const searchModal = ref<InstanceType<typeof SearchModal> | null>(null)
 
@@ -212,7 +210,8 @@ onUnmounted(() => {
         form="search-form"
         @click="processSearch(search)"
       >
-        <span class="icon" v-html="getIcon(search.icon)" /> {{ search.name }}
+        <span class="si" :style="`--icon-url: url('/si-icons/node_modules/simple-icons/icons/${search.icon}.svg')`" />
+        {{ search.name }}
       </button>
       <button :class="['btn', isEditing ? 'btn-warning' : 'btn-outline-warning']" @click="isEditing = !isEditing">
         <i class="fa-regular fa-pen-to-square"></i>
