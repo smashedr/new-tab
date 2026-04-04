@@ -210,7 +210,7 @@ onUnmounted(() => {
         form="search-form"
         @click="processSearch(search)"
       >
-        <span class="si" :style="`--icon-url: url('/si/node_modules/simple-icons/icons/${search.icon}.svg')`" />
+        <span class="si" :style="`--icon-url: url('/si/${search.icon}.svg')`" />
         {{ search.name }}
       </button>
       <button :class="['btn', isEditing ? 'btn-warning' : 'btn-outline-warning']" @click="isEditing = !isEditing">

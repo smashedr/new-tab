@@ -135,10 +135,10 @@ defineExpose({ focusSearch })
           autocomplete="off"
           required
         />
-        <button class="btn btn-success" type="submit">Go</button>
+        <button class="btn btn-success" type="submit" tabindex="-1">Go</button>
       </div>
     </form>
-    <div class="flex-grow-1 overflow-auto mt-2">
+    <div class="flex-grow-1 overflow-auto mt-2" tabindex="-1">
       <ul>
         <li v-for="url in filteredRepos" :key="url">
           <a :href="url" @click.prevent="openUrl(url)">{{ url?.replace('https://github.com/', '') }}</a>
