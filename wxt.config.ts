@@ -1,5 +1,6 @@
 import { defineConfig } from 'wxt'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { cp } from 'node:fs/promises'
+import { join } from 'node:path'
 
 // NOTE: Icons are also defined in <mata> tags for:
 //    popup/index.html
@@ -82,7 +83,7 @@ export default defineConfig({
         ? {
             browser_specific_settings: {
               gecko: {
-                id: 'new-tab-dev@cssnr.com',
+                id: 'new-tab@cssnr.com',
                 strict_min_version: '112.0', // unknown
                 data_collection_permissions: { required: ['none'] },
                 update_url:
@@ -96,11 +97,14 @@ export default defineConfig({
   },
 
   // // https://wxt.dev/guide/essentials/config/hooks
-  // hooks: {
-  //   'build:done': async (wxt) => {
-  //     await generateIcons(wxt.config.outDir)
-  //   },
-  // },
+  hooks: {
+    'build:done': async (wxt) => {
+      const src = join(process.cwd(), 'node_modules/simple-icons/icons')
+      const dest = join(wxt.config.outDir, 'si')
+      console.log(`Copying simple-icons to ${dest}`)
+      await cp(src, dest, { recursive: true })
+    },
+  },
 
   // https://wxt.dev/guide/essentials/config/browser-startup.html
   // NOTE: Override with web-ext.config.ts
@@ -110,17 +114,6 @@ export default defineConfig({
 
   // https://wxt.dev/guide/essentials/config/vite.html
   vite: () => ({
-    plugins: [
-      // NOTE: For retarded icons
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'node_modules/simple-icons/icons/*.svg',
-            dest: 'si',
-          },
-        ],
-      }),
-    ],
     // NOTE: This silences bootstrap deprecation warnings
     css: {
       preprocessorOptions: {
