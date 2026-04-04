@@ -24,8 +24,7 @@ async function copySupport(event: Event) {
   const options = await getOptions()
   const local = await chrome.storage.local.get()
 
-  // options.pictureURL = options.pictureURL ? 'SET' : 'NOT SET'
-  // options.videoURL = options.videoURL ? 'SET' : 'NOT SET'
+  options.bgImage = options.bgImage ? 'SET' : 'NOT SET'
   // delete local.results
 
   const result = [
