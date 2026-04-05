@@ -58,7 +58,7 @@ const manifest = chrome.runtime.getManifest()
 
         <OptionsForm />
 
-        <PermsCheck :close-window="true" :show-info="true" class="my-3" />
+        <PermsCheck :show-info="true" class="my-3" />
 
         <CopySupport class="my-3">Copy Support Information</CopySupport>
 

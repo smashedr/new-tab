@@ -2,7 +2,7 @@
 import { i18n } from '#imports'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useToast } from '@/composables/useToast.ts'
-import { clickOpen, hasPermissions } from '@/utils/extension.ts'
+import { clickOpen } from '@/utils/extension.ts'
 import { isFirefox } from '@/utils/system.ts'
 
 const { showToast } = useToast()
@@ -24,8 +24,12 @@ const props = withDefaults(
 
 const hasPerms = ref(true)
 
+const manifest = chrome.runtime.getManifest()
+const origins = manifest.content_scripts?.[0].matches
+console.debug('PermsCheck.vue - origins:', origins)
+
 async function updatePerms() {
-  hasPerms.value = await hasPermissions()
+  hasPerms.value = await chrome.permissions.contains({ origins })
   console.debug('updatePerms:', hasPerms.value)
 }
 
@@ -40,7 +44,7 @@ async function revokePerms(event: Event) {
   const permissions = await chrome.permissions.getAll()
   console.debug('permissions:', permissions)
   try {
-    await chrome.permissions.remove({ origins: permissions.origins })
+    await chrome.permissions.remove({ origins })
     await updatePerms()
   } catch (e) {
     console.debug(e)
@@ -49,9 +53,7 @@ async function revokePerms(event: Event) {
 }
 
 async function requestPerms() {
-  // NOTE: This should be a reusable function in utils/extension.ts
-  const manifest = chrome.runtime.getManifest()
-  return await chrome.permissions.request({ origins: manifest.host_permissions })
+  return await chrome.permissions.request({ origins })
 }
 
 onMounted(() => {

@@ -2,18 +2,6 @@ import { defineConfig } from 'wxt'
 import { cp } from 'node:fs/promises'
 import { join } from 'node:path'
 
-// NOTE: Icons are also defined in <mata> tags for:
-//    popup/index.html
-//    sidepanel/index.html
-// const icons = {
-//   16: 'icons/16.png',
-//   24: 'icons/24.png',
-//   32: 'icons/32.png',
-//   48: 'icons/48.png',
-//   96: 'icons/96.png',
-//   128: 'icons/128.png',
-// }
-
 // See https://wxt.dev/api/config.html
 // noinspection JSUnusedGlobalSymbols
 export default defineConfig({
@@ -29,9 +17,6 @@ export default defineConfig({
     // developmentIndicator: 'overlay',
     sizes: [96, 24], // Dfault: 128, 48, 32, 16
   },
-  // NOTE: Icons are also defined in <mata> tags for:
-  //    popup/index.html
-  //    sidepanel/index.html
 
   // https://wxt.dev/guide/essentials/config/manifest.html
   manifest: ({ browser, mode }) => {
@@ -84,20 +69,25 @@ export default defineConfig({
             browser_specific_settings: {
               gecko: {
                 id: 'new-tab@cssnr.com',
-                strict_min_version: '112.0', // unknown
+                strict_min_version: '112.0', // manifest - background.type
                 data_collection_permissions: { required: ['none'] },
                 update_url:
                   'https://raw.githubusercontent.com/smashedr/new-tab/master/update.json',
               },
-              gecko_android: { strict_min_version: '120.0' }, // unknown
+              gecko_android: { strict_min_version: '120.0' }, // permissions.request
             },
           }
         : { minimum_chrome_version: '127' }), // chrome.action.openPopup
     }
   },
 
-  // // https://wxt.dev/guide/essentials/config/hooks
+  // https://wxt.dev/guide/essentials/config/hooks
   hooks: {
+    'build:manifestGenerated': (wxt, manifest) => {
+      console.log('build:manifestGenerated:', wxt.config.browser)
+      if (manifest.action) manifest.action.default_icon = manifest.icons
+      if (manifest.sidebar_action) manifest.sidebar_action.default_icon = manifest.icons
+    },
     'build:done': async (wxt) => {
       const src = join(process.cwd(), 'node_modules/simple-icons/icons')
       const dest = join(wxt.config.outDir, 'si')
