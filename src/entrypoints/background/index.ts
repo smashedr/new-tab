@@ -41,28 +41,26 @@ async function onInstalled(details: chrome.runtime.InstalledDetails) {
   console.log('onInstalled:', details)
 
   const options = await setDefaultOptions(defaultOptions)
+  // NOTE: DUPLICATION in onStartup
   console.debug('options:', options)
-
   if (options.contextMenu) createContextMenus()
-
   const manifest = chrome.runtime.getManifest()
   console.debug('manifest:', manifest)
-
-  await chrome.runtime.setUninstallURL(`${manifest.homepage_url}/issues`)
+  chrome.runtime.setUninstallURL(`${manifest.homepage_url}/issues`).catch(console.warn)
 
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-    await chrome.runtime.openOptionsPage()
-    // const hasPerms = await checkPerms(manifest)
-    // const hasPerms = await chrome.permissions.contains({
-    //   origins: manifest.host_permissions,
-    // })
-    // console.debug('hasPerms:', hasPerms)
-    // if (hasPerms) {
-    //   await chrome.runtime.openOptionsPage()
-    // } else {
-    //   const url = chrome.runtime.getURL('permissions.html')
-    //   await chrome.tabs.create({ active: true, url })
-    // }
+    // TODO: Confirm the permissions check does not cause any issues...
+    // NOTE: origins are also defined in components/PermsCheck.vue
+    const hasPerms = await chrome.permissions.contains({
+      origins: manifest.content_scripts?.[0].matches,
+    })
+    console.debug('hasPerms:', hasPerms)
+    if (hasPerms) {
+      await chrome.runtime.openOptionsPage()
+    } else {
+      const url = chrome.runtime.getURL('permissions.html')
+      await chrome.tabs.create({ active: true, url })
+    }
   } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
     if (options.showUpdate) {
       if (manifest.version !== details.previousVersion) {
@@ -83,10 +81,9 @@ async function onStartup() {
     const options = await getOptions()
     console.debug('options:', options)
     if (options.contextMenu) createContextMenus()
-
     const manifest = chrome.runtime.getManifest()
     console.debug('manifest:', manifest)
-    await chrome.runtime.setUninstallURL(`${manifest.homepage_url}/issues`)
+    chrome.runtime.setUninstallURL(`${manifest.homepage_url}/issues`).catch(console.warn)
   }
 }
 
