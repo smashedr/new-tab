@@ -34,5 +34,3 @@ const vToast = {
     </div>
   </div>
 </template>
-
-<!--<style scoped></style>-->

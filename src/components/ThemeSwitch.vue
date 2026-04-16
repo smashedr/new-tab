@@ -38,5 +38,3 @@ import { i18n } from '#imports'
   </div>
   <!-- dropdown -->
 </template>
-
-<!--<style scoped></style>-->
