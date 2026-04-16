@@ -157,5 +157,3 @@ defineExpose({ focusSearch })
     </div>
   </div>
 </template>
-
-<!--<style scoped></style>-->

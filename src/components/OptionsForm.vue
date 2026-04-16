@@ -194,5 +194,3 @@ function urlChange(id: string, value: string) {
     </div>
   </form>
 </template>
-
-<!--<style scoped></style>-->
