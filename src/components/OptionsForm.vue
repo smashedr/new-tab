@@ -87,26 +87,6 @@ function urlChange(id: string, value: string) {
         <div class="form-text" id="expandedRowsHelp">Search Box Expanded Rows.</div>
       </div>
 
-      <div class="col-12">
-        <label for="githubUrl" class="form-label"><i class="fa-brands fa-github me-1"></i> GitHub URL</label>
-        <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Custom GitHub URL." v-bs></i>
-        <input
-          v-model="options.githubUrl"
-          @change="urlChange('githubUrl', options.githubUrl)"
-          id="githubUrl"
-          aria-describedby="githubUrlHelp"
-          class="form-control"
-          :class="{ 'is-invalid': !githubUrlValid }"
-          type="text"
-          autocomplete="off"
-          placeholder="https://github.com"
-        />
-        <div class="form-text" id="githubUrlHelp">Custom GitHub URL.</div>
-        <div class="invalid-feedback">Invalid URL</div>
-      </div>
-
-      <BackgroundForm />
-
       <div class="col-12 col-sm-6 mb-2">
         <label for="textRows" class="form-label"><i class="fa-solid fa-grip-lines"></i> Text Rows</label>
         <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Number of Text Rows." v-bs></i>
@@ -180,6 +160,26 @@ function urlChange(id: string, value: string) {
             />
           </div>
         </div>
+
+        <div class="col-12">
+          <label for="githubUrl" class="form-label"><i class="fa-brands fa-github me-1"></i> GitHub URL</label>
+          <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Custom GitHub URL." v-bs></i>
+          <input
+            v-model="options.githubUrl"
+            @change="urlChange('githubUrl', options.githubUrl)"
+            id="githubUrl"
+            aria-describedby="githubUrlHelp"
+            class="form-control"
+            :class="{ 'is-invalid': !githubUrlValid }"
+            type="text"
+            autocomplete="off"
+            placeholder="https://github.com"
+          />
+          <div class="form-text visually-hidden" id="githubUrlHelp">Custom GitHub URL.</div>
+          <div class="invalid-feedback">Invalid URL</div>
+        </div>
+
+        <BackgroundForm />
 
         <HorizontalRule>Extension Options</HorizontalRule>
       </div>
