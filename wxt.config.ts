@@ -70,7 +70,7 @@ export default defineConfig({
                 update_url:
                   'https://raw.githubusercontent.com/smashedr/new-tab/master/update.json',
               },
-              gecko_android: { strict_min_version: '120.0' }, // permissions.request
+              // gecko_android: { strict_min_version: '120.0' }, // permissions.request
             },
           }
         : { minimum_chrome_version: '127' }), // chrome.action.openPopup
@@ -83,6 +83,9 @@ export default defineConfig({
       console.log('build:manifestGenerated:', wxt.config.browser)
       if (manifest.action) manifest.action.default_icon = manifest.icons
       if (manifest.sidebar_action) manifest.sidebar_action.default_icon = manifest.icons
+      if (wxt.config.browser === 'firefox') {
+        manifest.permissions = manifest.permissions?.filter((p) => p !== 'favicon')
+      }
     },
     'build:done': async (wxt) => {
       const src = join(process.cwd(), 'node_modules/simple-icons/icons')
