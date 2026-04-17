@@ -65,12 +65,17 @@ jobs:
         with:
           name: artifacts
 
-      - name: "Debug 1"
+      - name: "Validate"
         run: |
           ls -lAh .
           stat "${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-chrome.zip"
-          yq -e '.version | test("${{ github.event.release.tag_name }}")' firefox-mv3/manifest.json
-          echo "::group::ls firefox-mv3"
+          yq -e '.version | test("${{ github.event.release.tag_name }}")' chrome-mv3/manifest.json
+          echo "::group::ls chrome-mv3"
+          ls -lAh chrome-mv3
+          echo "::endgroup::"
+          echo "::group::cat chrome-mv3/manifest.json"
+          cat chrome-mv3/manifest.json
+          echo -e "\n::endgroup::"
 
       #- name: "Setup Node"
       #  uses: actions/setup-node@v6
@@ -120,7 +125,7 @@ jobs:
           name: "amo-metadata.json"
           json: '{"version": {"release_notes": {"en-US": "${{ steps.notes.outputs.notes }}"}}}'
 
-      - name: "Debug 1"
+      - name: "Validate"
         run: |
           ls -lAh .
           stat "${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-sources.zip"
@@ -129,11 +134,11 @@ jobs:
           ls -lAh firefox-mv3
           echo "::endgroup::"
           echo "::group::cat firefox-mv3/manifest.json"
-          cat -n firefox-mv3/manifest.json
-          echo "::endgroup::"
+          cat firefox-mv3/manifest.json
+          echo -e "\n::endgroup::"
           echo "::group::cat amo-metadata.json"
-          cat -n amo-metadata.json
-          echo "::endgroup::"
+          cat amo-metadata.json
+          echo -e "\n::endgroup::"
 
       - name: "Sign Mozilla Addon"
         run: |
@@ -145,7 +150,8 @@ jobs:
             --amo-metadata="amo-metadata.json" \
             --upload-source-code="${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-sources.zip"
 
-      - name: "Debug 2"
+      - name: "Debug Artifacts"
+        continue-on-error: true
         run: |
           ls -lAh web-ext-artifacts
           echo "::group::ls ."
@@ -199,8 +205,8 @@ jobs:
         run: |
           git status
           echo "::group::cat ${{ env.UPDATE_JSON }}"
-          cat -n "${{ env.UPDATE_JSON }}"
-          echo "::endgroup::"
+          cat "${{ env.UPDATE_JSON }}"
+          echo -e "\n::endgroup::"
 
       - name: "Commit Action"
         id: commit
