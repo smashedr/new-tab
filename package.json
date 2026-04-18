@@ -14,6 +14,7 @@
     "android": "web-ext run -t firefox-android -s .output/firefox-mv3 --firefox-apk org.mozilla.firefox_beta --adb-device",
     "clean": "rm -rf .output",
     "tsc": "vue-tsc --noEmit",
+    "ncu": "ncu -u -x wxt",
     "prettier:check": "npx prettier --check .",
     "prettier:write": "npx prettier --write .",
     "lint:web-ext": "npm run build:ff && npx web-ext lint --source-dir .output/firefox-mv3 --self-hosted",
@@ -43,6 +44,6 @@
     "typescript": "~6.0.2",
     "vue-tsc": "^3.2.6",
     "web-ext": "^10.1.0",
-    "wxt": "^0.20.23"
+    "wxt": "0.20.21"
   }
 }
