@@ -64,7 +64,7 @@ function urlChange(id: string, value: string) {
           autocomplete="off"
           placeholder="# of Items"
         />
-        <div class="form-text" id="maxResultsHelp">Maximum Items Processed.</div>
+        <div class="form-text visually-hidden" id="maxResultsHelp">Maximum Items Processed.</div>
       </div>
 
       <div class="col-12 col-sm-6 mb-2">
@@ -87,7 +87,7 @@ function urlChange(id: string, value: string) {
           autocomplete="off"
           placeholder="# of Rows"
         />
-        <div class="form-text" id="expandedRowsHelp">Search Box Expanded Rows.</div>
+        <div class="form-text visually-hidden" id="expandedRowsHelp">Search Box Expanded Rows.</div>
       </div>
 
       <div class="col-12 col-sm-6 mb-2">
@@ -167,6 +167,27 @@ function urlChange(id: string, value: string) {
 
       <div class="col-12">
         <BookmarksForm />
+      </div>
+
+      <div class="col-12">
+        <label for="newTabTitle" class="form-label"><i class="fa-solid fa-t me-1"></i> New Tab Title</label>
+        <i
+          class="fa-solid fa-circle-info p-1"
+          data-bs-toggle="tooltip"
+          data-bs-title="Title of the New Tab page."
+          v-bs
+        ></i>
+        <input
+          v-model="options.newTabTitle"
+          @change="saveKeyValue('newTabTitle', options.newTabTitle)"
+          id="newTabTitle"
+          aria-describedby="newTabTitleHelp"
+          class="form-control"
+          type="text"
+          autocomplete="off"
+          placeholder="New Tab Title"
+        />
+        <div class="form-text visually-hidden" id="newTabTitleHelp">Custom GitHub URL.</div>
       </div>
 
       <div class="col-12">

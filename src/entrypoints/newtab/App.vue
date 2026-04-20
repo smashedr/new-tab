@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, provide, ref } from 'vue'
+import { i18n } from '#imports'
+import { onMounted, onUnmounted, provide, ref, watch } from 'vue'
 import { useBackground } from '@/composables/useBackground.ts'
-import { useTitle } from '@/composables/useTitle.ts'
 import { useOptions } from '@/composables/useOptions.ts'
 import { useBookmarks } from '@/composables/useBookmarks.ts'
-// import { useWallpaperDB } from '@/composables/useWallpaperDB.ts'
+import type { Options } from '@/utils/options.ts'
 import GitHubRepos from '@/components/GitHubRepos.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
 import TopSites from '@/components/TopSites.vue'
 import OptionsOffscreen from '@/components/OptionsOffscreen.vue'
 import BookmarksFolder from '@/components/BookmarksFolder.vue'
+
+// import { useWallpaperDB } from '@/composables/useWallpaperDB.ts'
 // import ImageManager from '@/components/ImageManager.vue'
 // import UppyDrop from '@/components/UppyDrop.vue'
 
 console.debug('%cLOADED: newtab/App.vue', 'color: Orange')
-
-useTitle()
 
 useBackground()
 
@@ -31,6 +31,10 @@ const githubSearch = ref<InstanceType<typeof GitHubRepos> | null>(null)
 
 // const imagesShown = ref(false)
 // const toggleImages = () => (imagesShown.value = !imagesShown.value)
+
+const setTitle = (opts: Options) => (document.title = opts.newTabTitle || i18n.t('newtab.title'))
+
+watch(options, setTitle, { once: true })
 
 function handleKeyboard(e: KeyboardEvent) {
   if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) return

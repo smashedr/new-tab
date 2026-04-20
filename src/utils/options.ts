@@ -8,6 +8,8 @@ export const defaultOptions = {
   numTopSites: 12,
   contextMenu: true,
   showUpdate: false,
+
+  newTabTitle: 'New Tab',
   githubUrl: 'https://github.com',
   folderId: '',
   numBookmarks: 12,
