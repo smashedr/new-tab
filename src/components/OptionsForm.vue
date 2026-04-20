@@ -197,9 +197,5 @@ function urlChange(id: string, value: string) {
     <template v-if="show.includes('switches')" v-for="id in switches" :key="id">
       <FormSwitch :id="id" v-model="options[id]" />
     </template>
-
-    <div>
-      <!--<OptionTable />-->
-    </div>
   </form>
 </template>

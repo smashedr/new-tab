@@ -41,7 +41,7 @@ const config = useAppConfig()
           target="_blank"
           @click.prevent="clickOpen($event, closeWindow)"
         >
-          <img v-if="icon" src="@/assets/icon.svg" alt="I" class="mb-1" style="height: 1.1em" />
+          <img v-if="icon" src="@/assets/icon.svg" alt="L" class="mb-1" style="height: 1.1em" />
           {{ config.shortName }}</a
         >
         <a

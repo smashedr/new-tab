@@ -3,10 +3,10 @@ import { type Options, getOptions } from '@/utils/options.ts'
 
 function setBackground(options: Options) {
   // NOTE: Copied from VanillaJS. Refactor this method...
-  console.log('useBackground.ts - setBackground:', options)
+  // console.log('useBackground.ts - setBackground:', options)
 
   const video = document.querySelector('video')
-  if (!video) return console.error('no video element') // NOTE: Handle Error
+  if (!video) return console.warn('no video element') // NOTE: Handle Error
 
   if (options.radioBackground === 'bgPicture') {
     const url = options.pictureURL || 'https://picsum.photos/1920/1080'
@@ -33,7 +33,7 @@ async function onChanged(changes: Record<string, any>) {
     items.oldValue.pictureURL !== items.newValue.pictureURL ||
     items.oldValue.videoURL !== items.newValue.videoURL
   ) {
-    console.log('%c Background Option Change Detected.', 'color: LightSkyBlue')
+    // console.log('%c Background Option Change Detected.', 'color: LightSkyBlue')
     setBackground(items.newValue)
   }
 }

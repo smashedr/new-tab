@@ -5,14 +5,12 @@ import { Modal } from 'bootstrap'
 
 const isEditing = ref(false)
 
-// --- Internal form state (not props!) ---
 const id = ref('')
 const name = ref('')
 const icon = ref('')
 const style = ref('')
 const url = ref('')
 
-// --- Bootstrap modal setup ---
 const modalEl = ref<HTMLElement | null>(null)
 let bsModal: Modal | null = null
 
@@ -30,7 +28,6 @@ onUnmounted(() => {
   bsModal?.dispose()
 })
 
-// --- Public API exposed to parent ---
 function open(data?: Partial<Search>) {
   isEditing.value = !!data
   id.value = data?.id ?? ''
