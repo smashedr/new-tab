@@ -7,7 +7,7 @@ const config = useAppConfig()
 
 <template>
   <div class="d-flex flex-row justify-content-center align-items-center">
-    <img :src="'/icons/48.png'" class="me-1" height="48" width="48" :alt="config.name" :title="config.name" />
+    <img src="@/assets/icon.svg" class="me-1" height="48" width="48" :alt="config.name" :title="config.name" />
     <div>
       <a
         class="link-body-emphasis text-decoration-none fs-1"

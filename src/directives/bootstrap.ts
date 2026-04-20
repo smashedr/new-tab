@@ -1,5 +1,5 @@
-import { Tooltip, Popover } from 'bootstrap'
 import { isMobile } from '@/utils/system.ts'
+import { Tooltip, Popover } from 'bootstrap'
 
 const COMPONENTS: Record<string, typeof Tooltip | typeof Popover> = {
   tooltip: Tooltip,

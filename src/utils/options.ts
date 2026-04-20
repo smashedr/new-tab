@@ -25,10 +25,9 @@ export async function getOptions(): Promise<Options> {
   return options as Options
 }
 
-// NOTE: This is not used yet...
-export async function saveKeyValue(key: string, value: any) /* NOSONAR */ {
+// NOTE: This is a WIP to replace the VanillaJS saveOptions
+export async function saveKeyValue(key: string, value: any) {
   console.debug(`saveKeyValue: ${key}:`, value)
-  console.debug('typeof value:', typeof value)
   if (!key || value === undefined) return
   const options = await getOptions()
   if (options[key] === value) return
@@ -37,8 +36,7 @@ export async function saveKeyValue(key: string, value: any) /* NOSONAR */ {
   await chrome.storage.sync.set({ options })
 }
 
-// NOTE: Below is ported from VanillaJS
-
+// NOTE: Below is from VanillaJS and being replaced with saveKeyValue
 export async function saveOptions(event: Event) /* NOSONAR */ {
   console.debug('saveOptions:', event)
   const options = await getOptions()
