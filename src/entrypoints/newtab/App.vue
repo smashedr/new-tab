@@ -84,7 +84,7 @@ onUnmounted(() => {
 
 <template>
   <header class="flex-shrink-0">
-    <SearchBox class="m-2" :expanded-rows="options.expandedRows" />
+    <SearchBox v-if="options.showSearch" class="m-2" :expanded-rows="options.expandedRows" />
 
     <BookmarksFolder
       :num-items="options.numBookmarks"

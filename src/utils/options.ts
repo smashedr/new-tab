@@ -4,6 +4,7 @@ export const defaultOptions = {
   maxResults: 10000,
   iconSize: 56,
   textRows: 1,
+  showSearch: true,
   showTopSites: true,
   numTopSites: 12,
   contextMenu: true,
