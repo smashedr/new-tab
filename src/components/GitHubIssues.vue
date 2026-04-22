@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted } from 'vue'
 import { getTextColor, timeSinceIso, timeSinceMs } from '@/utils'
 import { getOptions } from '@/utils/options.ts'
-import { getOwnerRepo, updateIssues } from '@/utils/github.ts'
+import { getRepo, updateIssues } from '@/utils/github.ts'
 import { useOptions } from '@/composables/useOptions.ts'
 import { useNow } from '@/composables/useNow.ts'
 import type { Endpoints } from '@octokit/types'
@@ -18,7 +18,7 @@ const isProcessing = ref(true)
 
 const issuesRef = ref<SearchIssuesResponse | null>(null)
 
-const parsedIssues = computed(() => issuesRef.value?.map((issue) => ({ ...issue, repo: getOwnerRepo(issue.html_url) })))
+const parsedIssues = computed(() => issuesRef.value?.map((issue) => ({ ...issue, repo: getRepo(issue.html_url) })))
 
 if (!chrome.storage.local.onChanged.hasListener(onChanged)) {
   chrome.storage.local.onChanged.addListener(onChanged)

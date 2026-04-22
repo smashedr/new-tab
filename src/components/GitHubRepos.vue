@@ -3,6 +3,7 @@ import { computed, nextTick, ref, onMounted } from 'vue'
 import { showToast } from '@/composables/useToast.ts'
 import { getOptions } from '@/utils/options.ts'
 import { openUrl } from '@/utils/index.ts'
+import { getRepo } from '@/utils/github.ts'
 
 const props = defineProps<{
   githubUrl: string
@@ -127,6 +128,12 @@ function focusSearch(char: string) {
 }
 
 defineExpose({ focusSearch })
+
+function parseRepo(url: string) {
+  const repo = getRepo(url)
+  if (!repo) return url
+  return `${repo.owner}/${repo.name}`
+}
 </script>
 
 <template>
@@ -151,7 +158,7 @@ defineExpose({ focusSearch })
     <div class="flex-grow-1 overflow-auto mt-2" tabindex="-1">
       <ul>
         <li v-for="url in filteredRepos" :key="url">
-          <a :href="url" @click.prevent="openUrl(url)">{{ url?.replace('https://github.com/', '') }}</a>
+          <a :href="url" @click.prevent="openUrl(url)">{{ parseRepo(url) }}</a>
         </li>
       </ul>
     </div>
