@@ -3,6 +3,7 @@ import { isFirefox } from '@/utils/system.ts'
 import { defineBackground } from 'wxt/utils/define-background'
 import { openExtPanel, openPopup, openSidePanel } from '@/utils/extension.ts'
 import { type Options, defaultOptions, getOptions } from '@/utils/options.ts'
+import { updateIssues } from '@/utils/github.ts'
 import { createContextMenus } from './menus.ts'
 
 export default defineBackground(() => {
@@ -14,15 +15,34 @@ export default defineBackground(() => {
   chrome.runtime.onMessage.addListener(onMessage)
   chrome.commands?.onCommand.addListener(onCommand)
   chrome.contextMenus?.onClicked.addListener(onClicked)
+
+  // chrome.alarms.onAlarm.addListener(onAlarm)
 })
+
+// function onAlarm(alarm: chrome.alarms.Alarm) {
+//   console.log('onAlarm:', alarm)
+// }
+//
+// async function setAlarms() {
+//   const alarm = await chrome.alarms.get('issues')
+//   console.log('setAlarms:', alarm)
+//
+//   if (!alarm) {
+//     console.log('%c chrome.alarms.create', 'color: Lime')
+//     await chrome.alarms.create('issues', { periodInMinutes: 1 })
+//   }
+// }
 
 async function onInstalled(details: chrome.runtime.InstalledDetails) {
   console.log('onInstalled:', details)
+
+  // setAlarms().catch(console.warn)
 
   const options = await setDefaultOptions(defaultOptions)
   console.debug('options:', options)
   if (options.contextMenu) createContextMenus()
   setUninstall().catch(console.warn)
+  updateIssues(options).catch(console.warn)
 
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
     await chrome.runtime.openOptionsPage()
@@ -43,6 +63,7 @@ async function onStartup() {
     console.debug('options:', options)
     if (options.contextMenu) createContextMenus()
     setUninstall().catch(console.warn)
+    updateIssues(options).catch(console.warn)
   }
 }
 

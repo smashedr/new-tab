@@ -11,16 +11,11 @@ import ToastAlerts from '@/components/ToastAlerts.vue'
 import TopSites from '@/components/TopSites.vue'
 import OptionsOffscreen from '@/components/OptionsOffscreen.vue'
 import BookmarksFolder from '@/components/BookmarksFolder.vue'
-
-// import { useWallpaperDB } from '@/composables/useWallpaperDB.ts'
-// import ImageManager from '@/components/ImageManager.vue'
-// import UppyDrop from '@/components/UppyDrop.vue'
+import GitHubIssues from '@/components/GitHubIssues.vue'
 
 console.debug('%cLOADED: newtab/App.vue', 'color: Orange')
 
 useBackground()
-
-// const { getSelected } = useWallpaperDB()
 
 const options = useOptions()
 
@@ -28,9 +23,6 @@ const bookmarks = useBookmarks()
 provide('bookmarks', bookmarks)
 
 const githubSearch = ref<InstanceType<typeof GitHubRepos> | null>(null)
-
-// const imagesShown = ref(false)
-// const toggleImages = () => (imagesShown.value = !imagesShown.value)
 
 const setTitle = (opts: Options) => (document.title = opts.newTabTitle || i18n.t('newtab.title'))
 
@@ -47,33 +39,9 @@ function handleKeyboard(e: KeyboardEvent) {
   githubSearch.value?.focusSearch(e.key)
 }
 
-// watchEffect(async () => {
-//   const bgImage = options.value.bgImage // access before await — tracked by Vue
-//   if (!bgImage) return
-//   await new Promise((resolve) => {
-//     const img = new Image()
-//     img.onload = resolve
-//     img.onerror = resolve
-//     img.src = bgImage
-//   })
-//   document.body.style.background = `url('${bgImage}') no-repeat center fixed`
-// })
-
 onMounted(async () => {
   console.debug('%cMOUNTED: newtab/App.vue', 'color: Lime')
   window.addEventListener('keydown', handleKeyboard)
-
-  // const selected = await getSelected()
-  // console.log('selected:', selected)
-  // const getRandomElement = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
-  // const randomElement = getRandomElement(selected)
-  // console.log('rand:', randomElement)
-  // if (randomElement?.data) {
-  //   // Convert the Blob to an object URL
-  //   const imageUrl = URL.createObjectURL(randomElement.data)
-  //   console.log('imageUrl:', imageUrl)
-  //   document.body.style.background = `url('${imageUrl}') no-repeat center fixed`
-  // }
 })
 
 onUnmounted(() => {
@@ -102,47 +70,27 @@ onUnmounted(() => {
     />
   </header>
 
-  <main class="flex-grow-1 overflow-auto">
-    <div class="container-fluid px-4 h-100">
-      <div class="d-flex align-items-center justify-content-center w-100 h-100 pb-3" style="min-height: 200px">
+  <main class="flex-grow-1 overflow-auto d-flex flex-column p-1">
+    <div :style="{ height: options.githubToken ? `35% !important` : '100% !important' }">
+      <!--TODO: Cleanup all these nested classes and move to GitHubRepos-->
+      <div class="d-flex align-items-center justify-content-center w-100 h-100 pb-3 pe-3">
         <div class="glass-outline rounded rounded-3 my-0 mx-auto w-100 h-100 d-flex flex-column">
-          <div class="p-3 flex-grow-1 overflow-auto">
+          <div class="p-1 flex-grow-1 overflow-auto">
             <GitHubRepos v-if="options.githubUrl" ref="githubSearch" :github-url="options.githubUrl" />
           </div>
         </div>
       </div>
     </div>
 
-    <!--<ImageManager v-if="imagesShown" />-->
+    <!--TODO: Implement scrolling on table and remove overflow-auto-->
+    <div v-if="options.githubToken" class="d-flex flex-column overflow-hidden" style="height: 65% !important">
+      <GitHubIssues />
+    </div>
   </main>
 
-  <footer class="flex-shrink-0">
-    <!--<hr class="my-0" />-->
-    <!--<PageFooter class="m-2" />-->
-  </footer>
+  <footer class="flex-shrink-0"></footer>
 
   <OptionsOffscreen />
 
-  <!--<button-->
-  <!--  id="toggle-history"-->
-  <!--  type="button"-->
-  <!--  :class="['btn', imagesShown ? 'btn-primary' : 'btn-link']"-->
-  <!--  @click="toggleImages"-->
-  <!--&gt;-->
-  <!--  <i class="fa-solid fa-image"></i>-->
-  <!--</button>-->
-
-  <!--<UppyDrop />-->
-
   <ToastAlerts />
-  <!--<BackToTop />-->
 </template>
-
-<!--<style scoped>-->
-<!--#toggle-history {-->
-<!--  position: fixed;-->
-<!--  bottom: 10px;-->
-<!--  right: 10px;-->
-<!--  z-index: 3;-->
-<!--}-->
-<!--</style>-->

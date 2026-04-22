@@ -12,6 +12,11 @@ export const defaultOptions = {
 
   newTabTitle: 'New Tab',
   githubUrl: 'https://github.com',
+  githubToken: '',
+  githubCooldown: 5,
+  githubPerPage: 40,
+  githubSearch: 'is:open involves:@me',
+
   folderId: '',
   numBookmarks: 12,
 
