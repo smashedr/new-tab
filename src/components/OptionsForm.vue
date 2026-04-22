@@ -193,13 +193,26 @@ function urlChange(id: string, value: string) {
       />
 
       <FormInput
-        class="col-12"
+        class="col-6"
         v-model="options.githubSearch"
         id="githubSearch"
-        label="GitHub Search Query"
+        label="Search Query"
         placeholder="is:open is:issue involves:@me"
         tooltip="This must be valid or it will break..."
         fa="fa-regular fa-circle-question"
+      />
+      <FormInput
+        class="col-6"
+        v-model="options.githubPerPage"
+        id="githubPerPage"
+        label="Results"
+        placeholder="# of Items"
+        tooltip="Numer of Results to Return"
+        fa="fa-solid fa-hashtag"
+        type="number"
+        step="1"
+        min="1"
+        max="100"
       />
 
       <BackgroundForm class="col-12" />

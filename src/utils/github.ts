@@ -36,6 +36,7 @@ export async function getIssues(options: Options) {
   const octokit = new Octokit({ auth: options.githubToken })
   const params: Parameters<typeof octokit.rest.search.issuesAndPullRequests>[0] = {
     q: options.githubSearch,
+    per_page: options.githubPerPage || 30,
   }
   // console.log('params:', params)
   const { data, headers } = await octokit.rest.search.issuesAndPullRequests(params)

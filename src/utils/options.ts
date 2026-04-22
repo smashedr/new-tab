@@ -14,7 +14,8 @@ export const defaultOptions = {
   githubUrl: 'https://github.com',
   githubToken: '',
   githubCooldown: 5,
-  githubSearch: 'is:open is:issue involves:@me',
+  githubPerPage: 40,
+  githubSearch: 'is:open involves:@me',
 
   folderId: '',
   numBookmarks: 12,

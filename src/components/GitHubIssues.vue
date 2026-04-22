@@ -7,8 +7,6 @@ import type { Endpoints } from '@octokit/types'
 
 type SearchIssuesResponse = Endpoints['GET /search/issues']['response']['data']['items']
 
-// const refreshBtn = useTemplateRef('refreshBtn')
-
 const isProcessing = ref(true)
 
 const issuesRef = ref<SearchIssuesResponse | null>(null)
@@ -57,7 +55,7 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
 </script>
 
 <template>
-  <table class="table table-sm table-hover table-striped" style="table-layout: fixed">
+  <table class="table table-sm table-hover table-striped issues-table" style="table-layout: fixed">
     <colgroup>
       <col style="width: 34px" />
       <col style="width: 70%" />
@@ -69,8 +67,8 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
       <tr>
         <th scope="col" class="text-truncate text-center"><i class="fa-regular fa-circle-user"></i></th>
         <th scope="col" class="text-truncate">
-          Issue Title
-          <span class="badge rounded-pill text-bg-success" role="button" @click="refreshClick"
+          Results - {{ parsedIssues?.length }}
+          <span class="badge rounded-pill text-bg-success ms-2" role="button" @click="refreshClick"
             ><i class="fa-solid fa-rotate" :class="{ 'fa-spin': isProcessing }"></i
           ></span>
         </th>
@@ -110,3 +108,12 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
     </tbody>
   </table>
 </template>
+
+<style scoped>
+.issues-table {
+  backdrop-filter: blur(8px);
+  --bs-table-bg: rgba(var(--bs-emphasis-bg-rgb), 0.6);
+  --bs-table-striped-bg: rgba(var(--bs-emphasis-bg-rgb), 0.5);
+  --bs-table-hover-bg: rgba(var(--bs-emphasis-bg-rgb), 0.8);
+}
+</style>
