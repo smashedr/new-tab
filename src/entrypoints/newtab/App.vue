@@ -11,6 +11,7 @@ import ToastAlerts from '@/components/ToastAlerts.vue'
 import TopSites from '@/components/TopSites.vue'
 import OptionsOffscreen from '@/components/OptionsOffscreen.vue'
 import BookmarksFolder from '@/components/BookmarksFolder.vue'
+import GitHubIssues from '@/components/GitHubIssues.vue'
 // import GitHubIssues from '@/components/GitHubIssues.vue'
 
 // import { useWallpaperDB } from '@/composables/useWallpaperDB.ts'
@@ -103,8 +104,8 @@ onUnmounted(() => {
     />
   </header>
 
-  <main class="flex-grow-1 overflow-auto">
-    <div class="container-fluid px-4 h-100">
+  <main class="flex-grow-1 overflow-auto d-flex flex-column p-1">
+    <div style="height: 40% !important">
       <div class="d-flex align-items-center justify-content-center w-100 h-100 pb-3" style="min-height: 200px">
         <div class="glass-outline rounded rounded-3 my-0 mx-auto w-100 h-100 d-flex flex-column">
           <div class="p-3 flex-grow-1 overflow-auto">
@@ -114,7 +115,10 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!--<ImageManager v-if="imagesShown" />-->
+    <!--TODO: Implement scrolling on table and remove overflow-auto-->
+    <div class="overflow-auto" style="height: 60% !important">
+      <GitHubIssues />
+    </div>
   </main>
 
   <footer class="flex-shrink-0">

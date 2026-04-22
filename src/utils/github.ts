@@ -31,11 +31,11 @@ export function getOwnerRepo(fullUrl?: string) {
   }
 }
 
-export async function getIssues(githubToken: string) {
-  console.log('%c getIssues:', 'color: SpringGreen', githubToken.slice(0, 10))
-  const octokit = new Octokit({ auth: githubToken })
+export async function getIssues(options: Options) {
+  console.log('%c getIssues:', 'color: SpringGreen', options.githubToken.slice(0, 10))
+  const octokit = new Octokit({ auth: options.githubToken })
   const params: Parameters<typeof octokit.rest.search.issuesAndPullRequests>[0] = {
-    q: 'is:open is:issue involves:@me',
+    q: options.githubSearch,
   }
   // console.log('params:', params)
   const { data, headers } = await octokit.rest.search.issuesAndPullRequests(params)
@@ -56,7 +56,7 @@ export async function updateIssues(options: Options) {
     Math.floor((Date.now() - issuesUpdated) / 60000) >= options.githubCooldown
   ) {
     console.log('%c updateIssues - Updating Issues...', 'color: Yellow')
-    const results = await getIssues(options.githubToken)
+    const results = await getIssues(options)
     console.log('results:', results)
     chrome.storage.local
       .set({ issues: results, issuesUpdated: Date.now() })

@@ -7,6 +7,10 @@ import type { Endpoints } from '@octokit/types'
 
 type SearchIssuesResponse = Endpoints['GET /search/issues']['response']['data']['items']
 
+// const refreshBtn = useTemplateRef('refreshBtn')
+
+const isProcessing = ref(true)
+
 const issuesRef = ref<SearchIssuesResponse | null>(null)
 
 const parsedIssues = computed(() => issuesRef.value?.map((issue) => ({ ...issue, repo: getOwnerRepo(issue.html_url) })))
@@ -24,6 +28,17 @@ async function onChanged(changes: Record<string, any>) {
   issuesRef.value = items.newValue
 }
 
+async function refreshClick() {
+  if (isProcessing.value) return
+  isProcessing.value = true
+  await chrome.storage.local.set({ issuesUpdated: null })
+  // TODO: Use useOptions instead of getOptions here...
+  const options = await getOptions()
+  updateIssues(options)
+    .catch(console.warn)
+    .finally(() => (isProcessing.value = false))
+}
+
 onMounted(async () => {
   const options = await getOptions()
   console.log('GitHubIssues.vue - onMounted:', options.githubToken.slice(0, 10))
@@ -34,7 +49,9 @@ onMounted(async () => {
   console.log('issues:', issues)
   if (issues) issuesRef.value = issues as SearchIssuesResponse
 
-  updateIssues(options).catch(console.warn)
+  updateIssues(options)
+    .catch(console.warn)
+    .finally(() => (isProcessing.value = false))
 })
 onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
 </script>
@@ -51,7 +68,12 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
     <thead>
       <tr>
         <th scope="col" class="text-truncate text-center"><i class="fa-regular fa-circle-user"></i></th>
-        <th scope="col" class="text-truncate">Issue Title</th>
+        <th scope="col" class="text-truncate">
+          Issue Title
+          <span class="badge rounded-pill text-bg-success" role="button" @click="refreshClick"
+            ><i class="fa-solid fa-rotate" :class="{ 'fa-spin': isProcessing }"></i
+          ></span>
+        </th>
         <th scope="col" class="text-truncate"><i class="fa-solid fa-code-branch"></i> Repository</th>
         <th scope="col" class="text-truncate"><i class="fa-regular fa-clock"></i> Updated</th>
         <th scope="col" class="text-truncate text-center"><i class="fa-regular fa-comments"></i></th>

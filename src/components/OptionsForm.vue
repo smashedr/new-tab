@@ -178,7 +178,6 @@ function urlChange(id: string, value: string) {
         fa="fa-solid fa-t"
         type="password"
       />
-
       <FormInput
         class="col-6"
         v-model="options.githubCooldown"
@@ -191,6 +190,16 @@ function urlChange(id: string, value: string) {
         step="1"
         min="1"
         max="60"
+      />
+
+      <FormInput
+        class="col-12"
+        v-model="options.githubSearch"
+        id="githubSearch"
+        label="GitHub Search Query"
+        placeholder="is:open is:issue involves:@me"
+        tooltip="This must be valid or it will break..."
+        fa="fa-regular fa-circle-question"
       />
 
       <BackgroundForm class="col-12" />
