@@ -18,8 +18,6 @@ const props = withDefaults(
 
 const width = computed(() => props.size + 'px')
 
-console.debug('%cLOADED: TopSites.vue', 'color: Orange', props)
-
 const topSites = ref<browser.topSites.MostVisitedURL[] | chrome.topSites.MostVisitedURL[]>([])
 const topSitesShown = computed(() =>
   props.numItems !== undefined ? topSites.value.slice(0, props.numItems) : topSites.value,
@@ -44,11 +42,7 @@ function getTopSites() {
   }
 }
 
-onMounted(async () => {
-  console.debug('%cMOUNTED: TopSites.vue', 'color: Lime')
-  topSites.value = await getTopSites()
-  console.log('topSites.value:', topSites.value)
-})
+onMounted(async () => getTopSites().then((results) => (topSites.value = results)))
 </script>
 
 <template>

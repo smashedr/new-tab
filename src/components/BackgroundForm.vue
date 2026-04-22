@@ -8,7 +8,6 @@ import HorizontalRule from '@/components/HorizontalRule.vue'
 const options = useOptions()
 
 const bgRef = ref<'bgNone' | 'bgPicture' | 'bgVideo'>('bgNone')
-
 const pictureURL = ref('')
 const videoURL = ref('')
 

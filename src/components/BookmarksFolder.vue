@@ -17,8 +17,6 @@ const props = withDefaults(
 
 const width = computed(() => props.size + 'px')
 
-console.debug('%cLOADED: BookmarksFolder.vue', 'color: Orange')
-
 const bookmarks = inject<Ref<chrome.bookmarks.BookmarkTreeNode[] | undefined>>('bookmarks')
 
 const bookmarksShown = computed(() =>
