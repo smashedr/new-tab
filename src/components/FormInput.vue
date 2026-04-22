@@ -45,6 +45,7 @@ const helpText = computed(() => props.help || i18n.t(`option.input.${props.id}.h
       :data-bs-title="tooltipText"
       v-bs
     ></i>
+    <slot />
     <input
       v-model="model"
       :id="id"

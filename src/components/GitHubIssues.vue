@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
-import { getTextColor, getTimeSince } from '@/utils'
+import { getTextColor, timeSinceIso, timeSinceMs } from '@/utils'
 import { getOptions } from '@/utils/options.ts'
 import { getOwnerRepo, updateIssues } from '@/utils/github.ts'
 import { useOptions } from '@/composables/useOptions.ts'
+import { useNow } from '@/composables/useNow.ts'
 import type { Endpoints } from '@octokit/types'
 
 type SearchIssuesResponse = Endpoints['GET /search/issues']['response']['data']['items']
 
 const options = useOptions()
 
+const now = useNow(60000)
+
+const lastUpdated = ref(0)
 const isProcessing = ref(true)
 
 const issuesRef = ref<SearchIssuesResponse | null>(null)
@@ -22,11 +26,10 @@ if (!chrome.storage.local.onChanged.hasListener(onChanged)) {
 
 async function onChanged(changes: Record<string, any>) {
   console.log('GitHubIssues.vue - onChanged:', changes)
-  const items = changes.issues // NOTE: Lazy Typing...
-  console.log('items:', items)
-  if (!items?.newValue) return
-  console.log('items.newValue.issues:', items.newValue)
-  issuesRef.value = items.newValue
+  console.log('changes.issuesUpdated?.newValue:', changes.issuesUpdated?.newValue)
+  if (changes.issuesUpdated?.newValue) lastUpdated.value = changes.issuesUpdated.newValue
+  console.log('changes.issues?.newValue:', changes.issues?.newValue)
+  if (changes.issues?.newValue) issuesRef.value = changes.issues.newValue
 }
 
 async function refreshClick() {
@@ -45,7 +48,9 @@ onMounted(async () => {
   // TODO: Ensure this view is not shown if no githubToken is set...
   if (!options.githubToken) return console.log('%cMissing githubToken', 'color: Yellow')
 
-  const { issues } = await chrome.storage.local.get(['issues'])
+  const { issues, issuesUpdated } = await chrome.storage.local.get(['issues', 'issuesUpdated'])
+  console.log('issuesUpdated:', issuesUpdated)
+  if (issuesUpdated) lastUpdated.value = issuesUpdated as number
   console.log('issues:', issues)
   if (issues) issuesRef.value = issues as SearchIssuesResponse
 
@@ -60,7 +65,7 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
   <div class="table-container">
     <table class="table table-sm table-hover table-striped issues-table" style="table-layout: fixed">
       <colgroup>
-        <col style="width: 34px" />
+        <col style="width: 32px" />
         <col style="width: 70%" />
         <col style="width: 30%" />
         <col style="width: 120px" />
@@ -71,10 +76,13 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
           <th scope="col" class="text-truncate text-center"><i class="fa-regular fa-circle-user"></i></th>
           <th scope="col" class="text-truncate">
             Results - {{ parsedIssues?.length }}
-            <span class="badge rounded-pill text-bg-success ms-2" role="button" @click="refreshClick"
+            <span class="badge rounded-pill text-bg-success mx-2" role="button" @click="refreshClick"
               ><i class="fa-solid fa-rotate" :class="{ 'fa-spin': isProcessing }"></i
             ></span>
-            <span class="text-muted ms-2">{{ options.githubSearch }}</span>
+            <span class="fw-normal text-success-emphasis">Updated {{ timeSinceMs(lastUpdated, now) }}</span>
+
+            <span class="mx-2">&bull;</span>
+            <span class="fw-normal text-muted">{{ options.githubSearch }}</span>
           </th>
           <th scope="col" class="text-truncate"><i class="fa-solid fa-code-branch"></i> Repository</th>
           <th scope="col" class="text-truncate"><i class="fa-regular fa-clock"></i> Updated</th>
@@ -89,6 +97,15 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
             </template>
           </td>
           <td class="text-truncate align-middle">
+            <i
+              class="me-2"
+              :class="{
+                'fa-solid fa-code-pull-request': issue.pull_request,
+                'fa-regular fa-circle-dot text-warning-emphasis': !issue.pull_request,
+                'fa-solid text-success-emphasis': issue.pull_request && !issue.draft,
+                'fa-solid text-muted': issue.pull_request && issue.draft,
+              }"
+            ></i>
             <a :href="issue.html_url" class="link-body-emphasis fw-bold">{{ issue.title }}</a>
             <span
               v-for="label in issue.labels"
@@ -104,7 +121,7 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
             >
           </td>
           <td v-else class="text-truncate">Unknown</td>
-          <td class="text-truncate">{{ getTimeSince(issue.updated_at) }}</td>
+          <td class="text-truncate">{{ timeSinceIso(issue.updated_at) }}</td>
           <td class="text-truncate text-center" :class="issue.comments ? 'fw-bold' : 'text-muted'">
             {{ issue.comments }}
           </td>

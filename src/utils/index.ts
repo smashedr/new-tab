@@ -8,10 +8,13 @@ export function debounce(fn: Function, timeout = 250) {
   }
 }
 
-export function getTimeSince(isoString: string): string {
+export function timeSinceIso(isoString: string): string {
   const updatedAt = new Date(isoString)
-  const now = new Date()
-  const seconds = Math.floor((now.getTime() - updatedAt.getTime()) / 1000)
+  return timeSinceMs(updatedAt.getTime())
+}
+
+export function timeSinceMs(ms: number, now = Date.now()): string {
+  const seconds = Math.floor((now - ms) / 1000)
 
   const intervals: [number, string][] = [
     [31536000, 'year'],

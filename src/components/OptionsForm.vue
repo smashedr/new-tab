@@ -150,7 +150,7 @@ function urlChange(id: string, value: string) {
         fa="fa-solid fa-t"
       />
 
-      <div class="col-12">
+      <div class="col-6">
         <label for="githubUrl" class="form-label"><i class="fa-brands fa-github me-1"></i> GitHub URL</label>
         <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Custom GitHub URL." v-bs></i>
         <input
@@ -180,6 +180,19 @@ function urlChange(id: string, value: string) {
       />
       <FormInput
         class="col-6"
+        v-model="options.githubPerPage"
+        id="githubPerPage"
+        label="Results"
+        placeholder="# of Items"
+        tooltip="Numer of Results to Return"
+        fa="fa-solid fa-hashtag"
+        type="number"
+        step="1"
+        min="1"
+        max="100"
+      />
+      <FormInput
+        class="col-6"
         v-model="options.githubCooldown"
         id="githubCooldown"
         label="GitHub CD"
@@ -193,27 +206,21 @@ function urlChange(id: string, value: string) {
       />
 
       <FormInput
-        class="col-6"
+        class="col-12"
         v-model="options.githubSearch"
         id="githubSearch"
         label="Search Query"
         placeholder="is:open is:issue involves:@me"
-        tooltip="This must be valid or it will break..."
+        tooltip="Issues and Pulls Query. See Query Help."
         fa="fa-regular fa-circle-question"
-      />
-      <FormInput
-        class="col-6"
-        v-model="options.githubPerPage"
-        id="githubPerPage"
-        label="Results"
-        placeholder="# of Items"
-        tooltip="Numer of Results to Return"
-        fa="fa-solid fa-hashtag"
-        type="number"
-        step="1"
-        min="1"
-        max="100"
-      />
+      >
+        <span class="float-end"
+          ><a
+            href="https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests"
+            target="_blank"
+            >Query Help <i class="fa-solid fa-up-right-from-square fa-sm"></i></a
+        ></span>
+      </FormInput>
 
       <BackgroundForm class="col-12" />
     </div>
