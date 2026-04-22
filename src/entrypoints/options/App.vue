@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { i18n } from '#imports'
-import { useTitle } from '@/composables/useTitle.ts'
-import { useBackground } from '@/composables/useBackground.ts'
 import { isFirefox } from '@/utils/system.ts'
+import { useTitle } from '@/composables/useTitle.ts'
 import BackToTop from '@/components/BackToTop.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
@@ -12,12 +11,9 @@ import PageFooter from '@/components/PageFooter.vue'
 import CopySupport from '@/components/CopySupport.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import HorizontalRule from '@/components/HorizontalRule.vue'
-
-console.debug('%c options/App.vue', 'color: Lime')
+import UseBackground from '@/components/UseBackground.vue'
 
 useTitle(i18n.t('options.title'))
-
-useBackground()
 </script>
 
 <template>
@@ -49,6 +45,7 @@ useBackground()
 
   <ToastAlerts />
   <BackToTop />
+  <UseBackground />
 </template>
 
 <style scoped>

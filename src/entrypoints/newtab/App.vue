@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { i18n } from '#imports'
 import { onMounted, onUnmounted, provide, ref, watch } from 'vue'
-import { useBackground } from '@/composables/useBackground.ts'
 import { useOptions } from '@/composables/useOptions.ts'
 import { useBookmarks } from '@/composables/useBookmarks.ts'
 import type { Options } from '@/utils/options.ts'
@@ -12,10 +11,7 @@ import TopSites from '@/components/TopSites.vue'
 import OptionsOffscreen from '@/components/OptionsOffscreen.vue'
 import BookmarksFolder from '@/components/BookmarksFolder.vue'
 import GitHubIssues from '@/components/GitHubIssues.vue'
-
-console.debug('%cLOADED: newtab/App.vue', 'color: Orange')
-
-useBackground()
+import UseBackground from '@/components/UseBackground.vue'
 
 const options = useOptions()
 
@@ -39,15 +35,8 @@ function handleKeyboard(e: KeyboardEvent) {
   githubSearch.value?.focusSearch(e.key)
 }
 
-onMounted(async () => {
-  console.debug('%cMOUNTED: newtab/App.vue', 'color: Lime')
-  window.addEventListener('keydown', handleKeyboard)
-})
-
-onUnmounted(() => {
-  console.debug('%cUNMOUNTED: newtab/App.vue', 'color: Yellow')
-  window.removeEventListener('keydown', handleKeyboard)
-})
+onMounted(() => window.addEventListener('keydown', handleKeyboard))
+onUnmounted(() => window.removeEventListener('keydown', handleKeyboard))
 </script>
 
 <template>
@@ -93,4 +82,5 @@ onUnmounted(() => {
   <OptionsOffscreen />
 
   <ToastAlerts />
+  <UseBackground />
 </template>
