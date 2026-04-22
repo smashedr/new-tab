@@ -3,6 +3,7 @@ import { isFirefox } from '@/utils/system.ts'
 import { defineBackground } from 'wxt/utils/define-background'
 import { openExtPanel, openPopup, openSidePanel } from '@/utils/extension.ts'
 import { type Options, defaultOptions, getOptions } from '@/utils/options.ts'
+import { updateIssues } from '@/utils/github.ts'
 import { createContextMenus } from './menus.ts'
 
 export default defineBackground(() => {
@@ -41,6 +42,7 @@ async function onInstalled(details: chrome.runtime.InstalledDetails) {
   console.debug('options:', options)
   if (options.contextMenu) createContextMenus()
   setUninstall().catch(console.warn)
+  updateIssues(options).catch(console.warn)
 
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
     await chrome.runtime.openOptionsPage()
@@ -61,6 +63,7 @@ async function onStartup() {
     console.debug('options:', options)
     if (options.contextMenu) createContextMenus()
     setUninstall().catch(console.warn)
+    updateIssues(options).catch(console.warn)
   }
 }
 

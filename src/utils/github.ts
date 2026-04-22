@@ -1,4 +1,5 @@
 import { Octokit } from 'octokit'
+import type { Options } from '@/utils/options.ts'
 
 interface Repository {
   owner: string
@@ -32,18 +33,36 @@ export function getOwnerRepo(fullUrl?: string) {
 
 export async function getIssues(githubToken: string) {
   console.log('%c getIssues:', 'color: SpringGreen', githubToken.slice(0, 10))
-  try {
-    const octokit = new Octokit({ auth: githubToken })
-    const params: Parameters<typeof octokit.rest.search.issuesAndPullRequests>[0] = {
-      q: 'is:open is:issue involves:@me',
-    }
-    console.log('params:', params)
-    const { data, headers } = await octokit.rest.search.issuesAndPullRequests(params)
-    console.log('headers:', headers)
-    console.log('data.items?.length:', data.items?.length)
-    return data.items
-  } catch (e) {
-    console.error(e)
-    console.log('updateIssues error status:', (e as any)?.status)
+  const octokit = new Octokit({ auth: githubToken })
+  const params: Parameters<typeof octokit.rest.search.issuesAndPullRequests>[0] = {
+    q: 'is:open is:issue involves:@me',
+  }
+  // console.log('params:', params)
+  const { data, headers } = await octokit.rest.search.issuesAndPullRequests(params)
+  console.log('headers:', headers)
+  console.log('data.items?.length:', data.items?.length)
+  return data.items
+}
+
+export async function updateIssues(options: Options) {
+  if (!options.githubToken) return console.log('%cMissing githubToken', 'color: Grey')
+
+  const storage = await chrome.storage.local.get(['issuesUpdated'])
+  const issuesUpdated = storage.issuesUpdated as number | undefined
+  console.log('issuesUpdated:', issuesUpdated)
+
+  if (
+    !issuesUpdated ||
+    Math.floor((Date.now() - issuesUpdated) / 60000) >= options.githubCooldown
+  ) {
+    console.log('%c updateIssues - Updating Issues...', 'color: Yellow')
+    const results = await getIssues(options.githubToken)
+    console.log('results:', results)
+    chrome.storage.local
+      .set({ issues: results, issuesUpdated: Date.now() })
+      .catch(console.warn)
+    return results
+  } else {
+    console.log('%c updateIssues - NO Update Needed!', 'color: SpringGreen')
   }
 }

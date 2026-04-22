@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { getTextColor, getTimeSince } from '@/utils'
 import { getOptions } from '@/utils/options.ts'
-import { getIssues, getOwnerRepo } from '@/utils/github.ts'
+import { getOwnerRepo, updateIssues } from '@/utils/github.ts'
 import type { Endpoints } from '@octokit/types'
 
 type SearchIssuesResponse = Endpoints['GET /search/issues']['response']['data']['items']
@@ -11,10 +11,6 @@ const issues = ref<SearchIssuesResponse | null>(null)
 
 const parsedIssues = computed(() => issues.value?.map((issue) => ({ ...issue, repo: getOwnerRepo(issue.html_url) })))
 
-const needsUpdate = (cd: number, updated?: number) => {
-  return updated ? Math.floor((Date.now() - updated) / 1000 / 60) >= cd : true
-}
-
 onMounted(async () => {
   const options = await getOptions()
   console.log('options.githubToken:', options.githubToken.slice(0, 10))
@@ -22,22 +18,24 @@ onMounted(async () => {
   if (!options.githubToken) return console.log('%cMissing githubToken', 'color: Yellow')
 
   const storage = await chrome.storage.local.get(['issues', 'issuesUpdated'])
-  console.log('storage:', storage)
-
+  // console.log('storage:', storage)
   console.log('issues:', storage.issues)
   if (storage.issues) issues.value = storage.issues as SearchIssuesResponse
 
-  // TODO: a reusable function to check and update issues...
-  console.log('issuesUpdated:', storage.issuesUpdated)
-  if (needsUpdate(options.githubCooldown, storage.issuesUpdated as number | undefined)) {
-    console.log('%c UPDATING ISSUES...', 'color: Yellow')
-    const results = await getIssues(options.githubToken)
+  updateIssues(options).then((results) => {
     console.log('results:', results)
-    if (results) {
-      issues.value = results
-      await chrome.storage.local.set({ issues: results, issuesUpdated: Date.now() })
-    }
-  }
+    if (results) issues.value = results
+  })
+
+  // console.log('issuesUpdated:', storage.issuesUpdated)
+  // if (needsUpdate(options.githubCooldown, storage.issuesUpdated as number | undefined)) {
+  //   console.log('%c UPDATING ISSUES...', 'color: Yellow')
+  //   getIssues(options.githubToken).then((results) => {
+  //     console.log('results:', results)
+  //     issues.value = results
+  //     chrome.storage.local.set({ issues: results, issuesUpdated: Date.now() })
+  //   })
+  // }
 })
 </script>
 
