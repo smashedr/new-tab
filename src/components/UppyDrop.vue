@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, useTemplateRef } from 'vue'
 import { useWallpaperDB } from '@/composables/useWallpaperDB.ts'
 import { Modal } from 'bootstrap'
 import Uppy from '@uppy/core'
@@ -10,10 +10,12 @@ import { showToast } from '@/composables/useToast.ts'
 
 const { addImage } = useWallpaperDB()
 
-const imageModal = ref<HTMLElement | null>(null)
+const mediaType = ref<'image' | 'video' | ''>('')
+
+const imageModal = useTemplateRef('imageModal')
 let modal: Modal
 
-const mediaSrc = ref<string | null>(null)
+const mediaSrc = ref<string>('')
 let uppy: Uppy
 
 async function processUpload() {
@@ -39,8 +41,6 @@ async function processUpload() {
 //   }
 //   return new Blob([byteArray], { type: mimeType })
 // }
-
-const mediaType = ref<'image' | 'video' | ''>('')
 
 onMounted(() => {
   modal = new Modal(imageModal.value!)
@@ -92,7 +92,7 @@ onUnmounted(() => {
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-capitalize" id="image-modal-label">Upload {{ mediaType }}</h1>
+          <h1 id="image-modal-label" class="modal-title fs-5 text-capitalize">Upload {{ mediaType }}</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1"></button>
         </div>
         <div class="modal-body text-center p-2">
@@ -105,7 +105,7 @@ onUnmounted(() => {
               class="modal-img img-fluid img-thumbnail"
             />
             <video
-              class="img-fluid img-thumbnail"
+              class="modal-img img-fluid img-thumbnail"
               v-if="mediaSrc && mediaType === 'video'"
               :src="mediaSrc"
               playsinline
