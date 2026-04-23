@@ -30,10 +30,6 @@ async function setBackground(options: Options) {
     video.value.classList.remove('d-none')
     document.body.style.cssText = ''
   } else if (options.radioBackground === 'bgLocal') {
-    console.log('%c WIP - LOCAL BG SELECTED', 'color: Yellow')
-    // const url = options.pictureURL || 'https://picsum.photos/1920/1080'
-    // document.body.style.background = `url('${url}') no-repeat center fixed`
-    // document.body.style.backgroundSize = 'cover'
     video.value.classList.add('d-none')
     document.body.style.cssText = ''
     // TODO: WIP - use selected background
@@ -44,10 +40,17 @@ async function setBackground(options: Options) {
     console.log('rand:', randomElement)
     if (randomElement?.data) {
       // Convert the Blob to an object URL
-      const imageUrl = URL.createObjectURL(randomElement.data)
-      console.log('imageUrl:', imageUrl)
-      document.body.style.background = `url('${imageUrl}') no-repeat center fixed`
-      document.body.style.backgroundSize = 'cover'
+      const srcUrl = URL.createObjectURL(randomElement.data)
+      console.log('srcUrl:', srcUrl)
+      if (randomElement.data.type.startsWith('image')) {
+        document.body.style.background = `url('${srcUrl}') no-repeat center fixed`
+        document.body.style.backgroundSize = 'cover'
+        video.value.classList.add('d-none')
+      } else if (randomElement.data.type.startsWith('video')) {
+        video.value.src = srcUrl
+        video.value.classList.remove('d-none')
+        document.body.style.cssText = ''
+      }
     }
   } else {
     document.body.style.cssText = ''

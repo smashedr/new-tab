@@ -89,12 +89,26 @@ async function confirmDelete(e: MouseEvent) {
           :class="[image.selected ? 'border-warning' : '']"
         >
           <div>
+            <!--TODO: Add re-usable image/video component...-->
             <img
+              v-if="image.data.type.startsWith('image')"
               :src="getImageUrl(image.data)"
-              :alt="`Wallpaper ${image.id}`"
+              :alt="`Image ${image.id}`"
               class="wallpaper-img w-100 h-100 object-fit-cover"
               :data-idx="i"
               @click="selectItem(image)"
+            />
+            <video
+              v-if="image.data.type.startsWith('video')"
+              :src="getImageUrl(image.data)"
+              :alt="`Video ${image.id}`"
+              class="wallpaper-img w-100 h-100 object-fit-cover"
+              :data-idx="i"
+              @click="selectItem(image)"
+              playsinline
+              autoplay
+              muted
+              loop
             />
             <div class="position-absolute top-0 start-0 w-100 d-flex end gap-2 p-1">
               <button class="btn btn-sm btn-outline-light" :data-idx="i" @click.prevent="downloadClick">
@@ -127,7 +141,23 @@ async function confirmDelete(e: MouseEvent) {
           </div>
           <div class="modal-body text-center p-2">
             <p class="mb-1">Confirm deleting your shitty image?</p>
-            <img v-if="selectedImage" class="modal-img" :src="getImageUrl(selectedImage.data)" alt="trash" />
+            <!--TODO: Add re-usable image/video component...-->
+            <img
+              v-if="selectedImage && selectedImage.data.type.startsWith('image')"
+              class="modal-img"
+              :src="getImageUrl(selectedImage.data)"
+              alt="trash"
+            />
+            <video
+              v-if="selectedImage && selectedImage.data.type.startsWith('video')"
+              class="modal-img"
+              :src="getImageUrl(selectedImage.data)"
+              alt="trash"
+              playsinline
+              autoplay
+              muted
+              loop
+            />
           </div>
           <div class="modal-footer p-2">
             <button type="button" class="btn btn-danger me-auto" @click="confirmDelete">
