@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useWallpaperDB, WallpaperData } from '@/composables/useWallpaperDB.ts'
 import { Modal } from 'bootstrap'
+import { showToast } from '@/composables/useToast.ts'
 
 const { getAll, deleteId, toggleSelected, wallpaperDBChannel } = useWallpaperDB()
 
@@ -44,11 +45,21 @@ async function selectItem(image: WallpaperData) {
 //   return image
 // }
 
-function onClick(e: Event) {
-  console.log('onClick:', e)
+function downloadClick(e: Event) {
+  console.log('downloadClick:', e)
   const target = e.currentTarget as HTMLImageElement
-  console.log('target:', target)
-  // console.log('src:', target.src)
+  // console.log('target:', target)
+  console.log('idx:', target.dataset.idx)
+  if (!target.dataset.idx) return
+  const image = imagesRef.value[Number.parseInt(target.dataset.idx)]
+  console.log('image:', image)
+  showToast('INOP: Not Yet Implemented!', 'warning')
+}
+
+function deleteClick(e: Event) {
+  console.log('deleteClick:', e)
+  const target = e.currentTarget as HTMLImageElement
+  // console.log('target:', target)
   console.log('idx:', target.dataset.idx)
   if (!target.dataset.idx) return
   const image = imagesRef.value[Number.parseInt(target.dataset.idx)]
@@ -70,52 +81,64 @@ async function confirmDelete(e: MouseEvent) {
 </script>
 
 <template>
-  <div class="container py-4">
-    <div class="row g-3">
+  <div class="container">
+    <div class="row g-2">
       <div class="col-6 col-sm-4 col-md-3 col-lg-2" v-for="(image, i) in imagesRef" :key="i">
         <div
           class="position-relative overflow-hidden rounded rounded-3 border border-3 ratio ratio-1x1 bg-opacity-50 bg-black"
           :class="[image.selected ? 'border-warning' : '']"
         >
-          <img
-            :src="getImageUrl(image.data)"
-            :alt="`Wallpaper ${image.id}`"
-            class="wallpaper-img"
-            :data-idx="i"
-            @click="selectItem(image)"
-          />
+          <div>
+            <img
+              :src="getImageUrl(image.data)"
+              :alt="`Wallpaper ${image.id}`"
+              class="wallpaper-img w-100 h-100 object-fit-cover"
+              :data-idx="i"
+              @click="selectItem(image)"
+            />
+            <div class="position-absolute top-0 start-0 w-100 d-flex end gap-2 p-1">
+              <button class="btn btn-sm btn-outline-light" :data-idx="i" @click.prevent="downloadClick">
+                <i class="fa-solid fa-download"></i>
+              </button>
+              <button class="btn btn-sm btn-danger ms-auto" :data-idx="i" @click.prevent="deleteClick">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div
-    class="modal modal-lg fade"
-    id="delete-modal"
-    ref="deleteModalEl"
-    tabindex="-1"
-    aria-labelledby="delete-modal-label"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="delete-modal-label">Delete Image</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1"></button>
-        </div>
-        <div class="modal-body text-center p-2">
-          <p class="mb-1">Confirm deleting your shitty image?</p>
-          <img v-if="selectedImage" class="modal-img" :src="getImageUrl(selectedImage.data)" alt="trash" />
-        </div>
-        <div class="modal-footer p-2">
-          <button type="button" class="btn btn-danger me-auto" @click="confirmDelete">
-            Delete <i class="fa-regular fa-trash-can ms-2"></i>
-          </button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+  <Teleport to="body">
+    <div
+      class="modal modal-lg fade"
+      id="delete-modal"
+      ref="deleteModalEl"
+      tabindex="-1"
+      aria-labelledby="delete-modal-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="delete-modal-label">Delete Image</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1"></button>
+          </div>
+          <div class="modal-body text-center p-2">
+            <p class="mb-1">Confirm deleting your shitty image?</p>
+            <img v-if="selectedImage" class="modal-img" :src="getImageUrl(selectedImage.data)" alt="trash" />
+          </div>
+          <div class="modal-footer p-2">
+            <button type="button" class="btn btn-danger me-auto" @click="confirmDelete">
+              Delete <i class="fa-regular fa-trash-can ms-2"></i>
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style scoped>

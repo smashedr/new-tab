@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import { type Options, getOptions } from '@/utils/options.ts'
+import { useWallpaperDB } from '@/composables/useWallpaperDB.ts'
 
-const bgRef = ref<'bgNone' | 'bgPicture' | 'bgVideo'>('bgNone')
+const { deleteId, getAll, getSelected, toggleSelected, wallpaperDBChannel } = useWallpaperDB()
+
+const bgRef = ref<RadioBackground>('bgNone')
 const pictureURL = ref('')
 const videoURL = ref('')
 
 const video = useTemplateRef('video')
 
-function setBackground(options: Options) {
+async function setBackground(options: Options) {
   console.log('setBackground:', options.radioBackground)
   if (!video.value) return console.warn('no video element')
 
@@ -26,6 +29,25 @@ function setBackground(options: Options) {
     video.value.src = options.videoURL
     video.value.classList.remove('d-none')
     document.body.style.cssText = ''
+  } else if (options.radioBackground === 'bgLocal') {
+    console.log('%c WIP - LOCAL BG SELECTED', 'color: Yellow')
+    // const url = options.pictureURL || 'https://picsum.photos/1920/1080'
+    // document.body.style.background = `url('${url}') no-repeat center fixed`
+    // document.body.style.backgroundSize = 'cover'
+    video.value.classList.add('d-none')
+    document.body.style.cssText = ''
+    // TODO: WIP - use selected background
+    const selected = await getSelected()
+    console.log('selected:', selected)
+    const getRandomElement = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
+    const randomElement = getRandomElement(selected)
+    console.log('rand:', randomElement)
+    if (randomElement?.data) {
+      // Convert the Blob to an object URL
+      const imageUrl = URL.createObjectURL(randomElement.data)
+      console.log('imageUrl:', imageUrl)
+      document.body.style.background = `url('${imageUrl}') no-repeat center fixed`
+    }
   } else {
     document.body.style.cssText = ''
     video.value.classList.add('d-none')
