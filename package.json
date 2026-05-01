@@ -16,7 +16,9 @@
     "tsc": "vue-tsc --noEmit",
     "prettier:check": "npx prettier --check .",
     "prettier:write": "npx prettier --write .",
-    "lint:web-ext": "npm run build:ff && npx web-ext lint --source-dir .output/firefox-mv3 --self-hosted",
+    "lint": "npx eslint src",
+    "lint:web-ext": "npm run build:ff && npm run web-ext",
+    "web-ext": "npx web-ext lint --source-dir .output/firefox-mv3 --self-hosted",
     "package": "npm run tsc && npm run zip && npm run zip:ff",
     "postinstall": "wxt prepare"
   },
@@ -27,10 +29,11 @@
     "camelcase": "^9.0.0",
     "idb": "^8.0.3",
     "octokit": "^5.0.5",
-    "simple-icons": "^16.17.0",
+    "simple-icons": "^16.18.0",
     "vue": "^3.5.33"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "@types/bootstrap": "^5.2.10",
     "@types/chrome": "^0.1.40",
@@ -38,10 +41,13 @@
     "@wxt-dev/auto-icons": "^1.1.1",
     "@wxt-dev/i18n": "^0.2.5",
     "@wxt-dev/module-vue": "^1.0.3",
+    "eslint": "^10.2.1",
+    "eslint-plugin-vue": "^10.9.0",
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",
     "sass": "^1.99.0",
     "typescript": "~6.0.3",
+    "typescript-eslint": "^8.59.1",
     "vue-tsc": "^3.2.7",
     "web-ext": "^10.1.0",
     "wxt": "0.20.25"

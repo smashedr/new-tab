@@ -12,7 +12,7 @@ defineProps<{
 }>()
 
 const hasCommands = ref<boolean>(!!chrome.commands)
-const commands = ref<{ description: string; shortcut: string }[]>([])
+const commands = ref<{ description: string; shortcut: string; name: string }[]>([])
 
 const openChromeShortcuts = () => chrome.tabs.update({ url: 'chrome://extensions/shortcuts' })
 
@@ -23,6 +23,7 @@ onMounted(async () => {
   commands.value = result.map(({ description, name, shortcut }) => ({
     description: description || (name === '_execute_action' ? i18n.t('cmd.executeAction') : notSet),
     shortcut: shortcut || notSet,
+    name: name || crypto.randomUUID(),
   }))
 })
 </script>
@@ -44,7 +45,7 @@ onMounted(async () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="cmd in commands">
+          <tr v-for="cmd in commands" :key="cmd.name">
             <td class="ps-2 text-truncate w-100" style="max-width: 0">
               <i class="fa-regular fa-keyboard me-1"></i>
               {{ cmd.description }}

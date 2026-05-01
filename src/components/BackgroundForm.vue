@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { i18n } from '#imports'
 import { ref, watch } from 'vue'
-import { useOptions } from '@/composables/useOptions.ts'
+import { openOptions } from '@/utils/extension.ts'
 import { saveKeyValue } from '@/utils/options.ts'
+import { useOptions } from '@/composables/useOptions.ts'
 import HorizontalRule from '@/components/HorizontalRule.vue'
+import ImageManager from '@/components/ImageManager.vue'
+import UppyDrop from '@/components/UppyDrop.vue'
+
+defineProps<{
+  imageManager?: boolean
+}>()
 
 const options = useOptions()
 
-const bgRef = ref<'bgNone' | 'bgPicture' | 'bgVideo'>('bgNone')
+const bgRef = ref<RadioBackground>('bgNone')
 const pictureURL = ref('')
 const videoURL = ref('')
 
@@ -22,6 +29,13 @@ watch(
   { deep: true },
 )
 
+const radios = [
+  { id: 'bgNone', fa: 'fa-regular fa-square', text: i18n.t('background.none') },
+  { id: 'bgPicture', fa: 'fa-regular fa-image', text: i18n.t('background.picture') },
+  { id: 'bgVideo', fa: 'fa-solid  fa-video', text: i18n.t('background.video') },
+  { id: 'bgLocal', fa: 'fa-regular fa-floppy-disk', text: i18n.t('background.local') },
+]
+
 // NOTE: This was ported from VanillaJS and may need refactoring
 </script>
 
@@ -30,46 +44,16 @@ watch(
     <HorizontalRule>New Tab Background</HorizontalRule>
     <form @change="saveKeyValue('radioBackground', bgRef)">
       <div class="d-flex flex-column flex-md-row ms-1 ms-md-3">
-        <div class="form-check form-check-inline mb-2 mb-md-0">
+        <div v-for="radio of radios" class="form-check form-check-inline mb-2 mb-md-0" :key="radio.id">
           <input
             v-model="bgRef"
             class="form-check-input"
             type="radio"
             name="radioBackground"
-            id="bgNone"
-            value="bgNone"
+            :id="radio.id"
+            :value="radio.id"
           />
-          <label class="form-check-label" for="bgNone">
-            <i class="fa-regular fa-square"></i> {{ i18n.t('background.none') }}
-          </label>
-        </div>
-
-        <div class="form-check form-check-inline mb-2 mb-md-0">
-          <input
-            v-model="bgRef"
-            class="form-check-input"
-            type="radio"
-            name="radioBackground"
-            id="bgPicture"
-            value="bgPicture"
-          />
-          <label class="form-check-label" for="bgPicture">
-            <i class="fa-regular fa-image"></i> {{ i18n.t('background.picture') }}
-          </label>
-        </div>
-
-        <div class="form-check form-check-inline mb-2">
-          <input
-            v-model="bgRef"
-            class="form-check-input"
-            type="radio"
-            name="radioBackground"
-            id="bgVideo"
-            value="bgVideo"
-          />
-          <label class="form-check-label" for="bgVideo">
-            <i class="fa-solid fa-video"></i> {{ i18n.t('background.video') }}
-          </label>
+          <label class="form-check-label" :for="radio.id"> <i :class="radio.fa"></i> {{ radio.text }} </label>
         </div>
       </div>
     </form>
@@ -120,5 +104,14 @@ watch(
         />
       </div>
     </div>
+
+    <ImageManager v-if="imageManager && bgRef === 'bgLocal'" />
+    <div v-if="!imageManager && bgRef === 'bgLocal'">
+      <a href="options.html" class="btn btn-sm btn-outline-primary d-block mt-1 mx-3" @click.prevent="openOptions()"
+        >Manage Images</a
+      >
+    </div>
+
+    <UppyDrop />
   </div>
 </template>
