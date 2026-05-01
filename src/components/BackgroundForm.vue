@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { i18n } from '#imports'
 import { ref, watch } from 'vue'
-import { useOptions } from '@/composables/useOptions.ts'
+import { openOptions } from '@/utils/extension.ts'
 import { saveKeyValue } from '@/utils/options.ts'
+import { useOptions } from '@/composables/useOptions.ts'
 import HorizontalRule from '@/components/HorizontalRule.vue'
 import ImageManager from '@/components/ImageManager.vue'
 import UppyDrop from '@/components/UppyDrop.vue'
@@ -105,7 +106,11 @@ const radios = [
     </div>
 
     <ImageManager v-if="imageManager && bgRef === 'bgLocal'" />
-    <!--TODO: Add !imageManager link to options-->
+    <div v-if="!imageManager && bgRef === 'bgLocal'">
+      <a href="options.html" class="btn btn-sm btn-outline-primary d-block mt-1 mx-3" @click.prevent="openOptions()"
+        >Manage Images</a
+      >
+    </div>
 
     <UppyDrop />
   </div>

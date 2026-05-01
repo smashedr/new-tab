@@ -5,7 +5,7 @@ import PanelHeader from '@/components/PanelHeader.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import PanelFooter from '@/components/PanelFooter.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
-import OptionsForm from '@/components/OptionsForm.vue'
+import BackgroundForm from '@/components/BackgroundForm.vue'
 
 console.debug('%c sidepanel/App.vue', 'color: Lime')
 </script>
@@ -16,14 +16,15 @@ console.debug('%c sidepanel/App.vue', 'color: Lime')
   </header>
 
   <main class="flex-grow-1 overflow-auto p-1">
-    <div class="d-grid gap-2">
+    <div class="d-grid gap-2 uppy-drop-target">
       <PermsCheck />
       <SearchBox :new-tab="true" :expanded-rows="4" />
+      <BackgroundForm :image-manager="true" class="col-12" />
     </div>
   </main>
 
   <footer class="flex-shrink-0">
-    <OptionsForm :show="['switches']" class="p-2" />
+    <!--<OptionsForm :show="['switches']" class="p-2" />-->
     <PanelFooter />
   </footer>
 
