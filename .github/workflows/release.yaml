@@ -99,7 +99,7 @@ jobs:
     name: "Publish Mozilla"
     if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
-    timeout-minutes: 180 # max 360
+    timeout-minutes: 60
     needs: [build, publish-chrome]
 
     permissions:
@@ -148,7 +148,7 @@ jobs:
           npx web-ext sign --no-input \
             --api-key="${FIREFOX_API_KEY}" \
             --api-secret="${FIREFOX_API_SECRET}" \
-            --channel=unlisted \
+            --channel=unlisted --approval-timeout=45 \
             --source-dir="firefox-mv3" \
             --amo-metadata="amo-metadata.json" \
             --upload-source-code="${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-sources.zip"
