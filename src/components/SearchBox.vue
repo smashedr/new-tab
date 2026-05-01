@@ -89,7 +89,11 @@ async function processSearch(search: Search) {
   console.log('value:', value)
   const url = search.url + encodeURIComponent(value)
   console.debug('url:', url)
-  props.newTab ? window.open(url) : openUrl(url)
+  if (props.newTab) {
+    window.open(url)
+  } else {
+    openUrl(url)
+  }
 }
 
 async function defaultSearch(e: Event) {
@@ -205,6 +209,7 @@ onUnmounted(() => {
       </button>
       <button
         v-for="(search, i) of searchesRef"
+        :key="i"
         :data-idx="i"
         :class="[`btn btn-${search.style}`, { 'fa-fade': isEditing }]"
         type="button"

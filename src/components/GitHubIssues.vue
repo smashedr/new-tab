@@ -90,7 +90,7 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
         </tr>
       </thead>
       <tbody>
-        <tr v-for="issue in parsedIssues">
+        <tr v-for="issue in parsedIssues" :key="issue.id">
           <td class="align-middle" style="line-height: 1">
             <template v-if="issue.user">
               <a :href="issue.user.html_url"> <img alt="" height="24" :src="issue.user.avatar_url" /></a>
@@ -109,6 +109,7 @@ onUnmounted(() => chrome.storage.local.onChanged.removeListener(onChanged))
             <a :href="issue.html_url" class="link-body-emphasis fw-bold">{{ issue.title }}</a>
             <span
               v-for="label in issue.labels"
+              :key="label.id"
               class="badge rounded-pill ms-1"
               :style="{ backgroundColor: `#${label.color}`, color: getTextColor(label.color) }"
               >{{ label.name }}</span

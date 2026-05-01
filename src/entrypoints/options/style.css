@@ -1,12 +1,12 @@
 html,
 body,
 #app {
-    height: 100%;
+  height: 100%;
 }
 
 #app {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 /*body {*/
@@ -18,11 +18,11 @@ body,
 /*}*/
 
 @supports (scrollbar-gutter: stable both-edges) {
-    html {
-        scrollbar-gutter: stable;
-    }
+  html {
+    scrollbar-gutter: stable;
+  }
 
-    body {
-        padding-right: 0 !important;
-    }
+  body {
+    padding-right: 0 !important;
+  }
 }

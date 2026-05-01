@@ -12,7 +12,6 @@ import CopySupport from '@/components/CopySupport.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import HorizontalRule from '@/components/HorizontalRule.vue'
 import UseBackground from '@/components/UseBackground.vue'
-import UppyDrop from '@/components/UppyDrop.vue'
 
 useTitle(i18n.t('options.title'))
 </script>
@@ -20,13 +19,13 @@ useTitle(i18n.t('options.title'))
 <template>
   <div class="d-flex align-items-center justify-content-center h-100 w-100 p-1 p-sm-3">
     <div class="m-auto pb-4 w-100">
-      <div id="options-wrapper" class="glass-outline rounded rounded-3 w-100 m-auto p-2 p-sm-3">
+      <div id="options-wrapper" class="glass-outline rounded rounded-3 w-100 m-auto p-2 p-sm-3 uppy-drop-target">
         <PageHeader />
 
         <KeyboardShortcuts />
 
         <HorizontalRule>New Tab Options</HorizontalRule>
-        <OptionsForm />
+        <OptionsForm :image-manager="true" />
 
         <PermsCheck :show-info="true" :show-remove="isFirefox" class="my-3" />
 
@@ -47,7 +46,6 @@ useTitle(i18n.t('options.title'))
   <ToastAlerts />
   <BackToTop />
   <UseBackground />
-  <UppyDrop />
 </template>
 
 <style scoped>

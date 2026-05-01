@@ -12,6 +12,7 @@ const props = withDefaults(
   defineProps<{
     show?: string[]
     switches?: string[]
+    imageManager?: boolean
   }>(),
   {
     show: () => ['newtab', 'switches'],
@@ -222,12 +223,12 @@ function urlChange(id: string, value: string) {
         ></span>
       </FormInput>
 
-      <BackgroundForm class="col-12" />
+      <BackgroundForm :image-manager="imageManager" class="col-12" />
     </div>
 
     <HorizontalRule>Extension Options</HorizontalRule>
-    <template v-if="show.includes('switches')" v-for="id in switches" :key="id">
-      <FormSwitch :id="id" v-model="options[id]" />
+    <template v-if="show.includes('switches')">
+      <FormSwitch v-for="id in switches" :key="id" :id="id" v-model="options[id]" />
     </template>
   </form>
 </template>

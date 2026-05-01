@@ -12,7 +12,6 @@ import OptionsOffscreen from '@/components/OptionsOffscreen.vue'
 import BookmarksFolder from '@/components/BookmarksFolder.vue'
 import GitHubIssues from '@/components/GitHubIssues.vue'
 import UseBackground from '@/components/UseBackground.vue'
-import UppyDrop from '@/components/UppyDrop.vue'
 
 const options = useOptions()
 
@@ -84,5 +83,4 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard))
 
   <ToastAlerts />
   <UseBackground />
-  <UppyDrop />
 </template>

@@ -67,7 +67,7 @@ async function onChanged(changes: Record<string, any>) {
     changes.options.oldValue.videoURL !== changes.options.newValue.videoURL
   ) {
     console.log('%c Background Change Detected.', 'color: LightSkyBlue')
-    setBackground(changes.options.newValue)
+    await setBackground(changes.options.newValue)
   }
 }
 

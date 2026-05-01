@@ -7,6 +7,7 @@ on:
 env:
   PACKAGE_NAME: new-tab
   CHROME_ID: goholgjajaneidafddjpiaphbdaalbhm
+  PUBLISHER_ID: 428868da-c02f-433a-b34c-208b3d01fbc3
   MOZILLA_ID: new-tab@cssnr.com
   UPDATE_JSON: update.json
 
@@ -23,7 +24,7 @@ jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     needs: [build]
 
     permissions:
@@ -55,8 +56,9 @@ jobs:
   publish-chrome:
     # https://developer.chrome.com/docs/webstore/using-api
     name: "Publish Chrome"
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     needs: [build]
 
     environment:
@@ -74,33 +76,15 @@ jobs:
           ls -lAh .
           stat "${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-chrome.zip"
           yq -e '.version | test("${{ github.event.release.tag_name }}")' chrome-mv3/manifest.json
-          echo "::group::ls chrome-mv3"
+          echo "::group::chrome-mv3"
           ls -lAh chrome-mv3
           echo "::endgroup::"
-          echo "::group::cat chrome-mv3/manifest.json"
-          cat chrome-mv3/manifest.json
-          echo -e "\n::endgroup::"
-
-      #- name: "Install PBE"
-      #  run: |
-      #    npm i -g publish-browser-extension
-      #    npx publish-extension --version
-      #
-      ## NOTE: This does not support Firefox amo-metadata
-      #- name: "Publish Extension"
-      #  run: |
-      #    npx publish-extension \
-      #      --chrome-zip "${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-chrome.zip" \
-      #      --chrome-extension-id ${{ env.CHROME_ID }} \
-      #      --chrome-client-id ${{ secrets.WEBSTORE_CLIENT_ID }} \
-      #      --chrome-client-secret ${{ secrets.WEBSTORE_CLIENT_SECRET }} \
-      #      --chrome-refresh-token  ${{ secrets.WEBSTORE_REFRESH_TOKEN }} \
-      #      --chrome-publish-target default \
-      #      --chrome-deploy-percentage 100 \
-      #      --chrome-skip-submit-review
+          echo "::group::chrome-mv3/manifest.json"
+          jq . chrome-mv3/manifest.json
+          echo "::endgroup::"
 
       - name: "Web Store Publish"
-        uses: cssnr/webstore-publish-action@master
+        uses: cssnr/webstore-publish-action@v1
         with:
           extension_id: ${{ env.CHROME_ID }}
           publisher_id: ${{env.PUBLISHER_ID}}
@@ -113,6 +97,7 @@ jobs:
   publish-mozilla:
     # https://mozilla.github.io/addons-server/topics/api/index.html
     name: "Publish Mozilla"
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
     timeout-minutes: 180 # max 360
     needs: [build, publish-chrome]
@@ -131,38 +116,36 @@ jobs:
           name: artifacts
 
       - name: "Generate Release Notes"
-        id: notes
+        env:
+          RELEASE_NOTES: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}
         run: |
-          notes="Full Release Notes: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}"
-          echo "notes=$notes" >> "$GITHUB_OUTPUT"
-
-      - name: "Write AMO Metadata"
-        uses: jsdaniell/create-json@b8e77fa01397ca39cc4a6198cc29a3be5481afef # v1.2.3
-        with:
-          name: "amo-metadata.json"
-          json: '{"version": {"release_notes": {"en-US": "${{ steps.notes.outputs.notes }}"}}}'
+          cat > amo-metadata.json << EOF
+          {"version": {"release_notes": {
+            "en-US": "Full Release Notes: $RELEASE_NOTES",
+          }}}
+          EOF
 
       - name: "Validate"
         run: |
           ls -lAh .
           stat "${{ env.PACKAGE_NAME }}-${{ github.event.release.tag_name }}-sources.zip"
           yq -e '.version | test("${{ github.event.release.tag_name }}")' firefox-mv3/manifest.json
-          echo "::group::ls firefox-mv3"
+          echo "::group::firefox-mv3"
           ls -lAh firefox-mv3
           echo "::endgroup::"
-          echo "::group::cat firefox-mv3/manifest.json"
-          cat firefox-mv3/manifest.json
-          echo -e "\n::endgroup::"
-          echo "::group::cat amo-metadata.json"
-          cat amo-metadata.json
-          echo -e "\n::endgroup::"
+          echo "::group::firefox-mv3/manifest.json"
+          jq . firefox-mv3/manifest.json
+          echo "::endgroup::"
+          echo "::group::amo-metadata.json"
+          jq . amo-metadata.json
+          echo "::endgroup::"
 
       - name: "Sign Mozilla Addon"
         env:
           FIREFOX_API_KEY: ${{ secrets.FIREFOX_API_KEY }}
           FIREFOX_API_SECRET: ${{ secrets.FIREFOX_API_SECRET }}
         run: |
-          npx web-ext sign \
+          npx web-ext sign --no-input \
             --api-key="${FIREFOX_API_KEY}" \
             --api-secret="${FIREFOX_API_SECRET}" \
             --channel=unlisted \
@@ -194,6 +177,7 @@ jobs:
 
   update-mozilla:
     name: "Update Mozilla"
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [publish-mozilla]
@@ -250,8 +234,8 @@ jobs:
         uses: re-actors/alls-green@release/v1
         with:
           jobs: ${{ toJSON(needs) }}
+          allowed-skips: publish-chrome,publish-mozilla,update-mozilla
           #allowed-failures: release
-          #allowed-skips: release
 
       #- name: "Cleanup Release"
       #  if: ${{ failure() }}

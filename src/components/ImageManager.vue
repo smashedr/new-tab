@@ -71,7 +71,7 @@ async function confirmDelete(e: MouseEvent) {
   console.log('confirmDelete:', e)
   // const target = e.currentTarget as HTMLImageElement
   // console.log('target:', target)
-  console.log('id:', selectedImage.value?.id!!)
+  console.log('id:', selectedImage.value?.id)
   if (!selectedImage.value?.id) return
   Modal.getOrCreateInstance(deleteModalEl.value!).hide()
   await deleteId(selectedImage.value?.id)

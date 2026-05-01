@@ -5,6 +5,11 @@ import { useOptions } from '@/composables/useOptions.ts'
 import { saveKeyValue } from '@/utils/options.ts'
 import HorizontalRule from '@/components/HorizontalRule.vue'
 import ImageManager from '@/components/ImageManager.vue'
+import UppyDrop from '@/components/UppyDrop.vue'
+
+defineProps<{
+  imageManager?: boolean
+}>()
 
 const options = useOptions()
 
@@ -38,7 +43,7 @@ const radios = [
     <HorizontalRule>New Tab Background</HorizontalRule>
     <form @change="saveKeyValue('radioBackground', bgRef)">
       <div class="d-flex flex-column flex-md-row ms-1 ms-md-3">
-        <div v-for="radio of radios" class="form-check form-check-inline mb-2 mb-md-0">
+        <div v-for="radio of radios" class="form-check form-check-inline mb-2 mb-md-0" :key="radio.id">
           <input
             v-model="bgRef"
             class="form-check-input"
@@ -99,6 +104,9 @@ const radios = [
       </div>
     </div>
 
-    <ImageManager v-if="bgRef === 'bgLocal'" />
+    <ImageManager v-if="imageManager && bgRef === 'bgLocal'" />
+    <!--TODO: Add !imageManager link to options-->
+
+    <UppyDrop />
   </div>
 </template>

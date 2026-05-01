@@ -26,7 +26,7 @@ import ThemeSwitch from '@/components/ThemeSwitch.vue'
       <h5 class="offcanvas-title ms-2" id="optionsOffcanvasLabel">Options</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body">
+    <div class="offcanvas-body uppy-drop-target">
       <OptionsForm />
     </div>
   </div>

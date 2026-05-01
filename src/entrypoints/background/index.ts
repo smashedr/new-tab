@@ -89,6 +89,7 @@ function onChanged(changes: Record<string, chrome.storage.StorageChange>) {
 function onMessage(
   message: any,
   _sender: chrome.runtime.MessageSender,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   _sendResponse: Function,
 ) {
   console.log('onMessage:', message)

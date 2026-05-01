@@ -51,7 +51,7 @@ onMounted(() => {
   })
 
   uppy = new Uppy().use(DropTarget, {
-    target: document.body,
+    target: '.uppy-drop-target',
   })
 
   uppy.on('file-added', (file) => {
@@ -81,49 +81,51 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    class="modal modal-lg fade"
-    id="image-modal"
-    ref="imageModal"
-    tabindex="-1"
-    aria-labelledby="image-modal-label"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 id="image-modal-label" class="modal-title fs-5 text-capitalize">Upload {{ mediaType }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1"></button>
-        </div>
-        <div class="modal-body text-center p-2">
-          <div class="modal-body text-center p-2">
-            <!--TODO: Add re-usable image/video component...-->
-            <img
-              v-if="mediaSrc && mediaType === 'image'"
-              :src="mediaSrc"
-              alt="Image"
-              class="modal-img img-fluid img-thumbnail"
-            />
-            <video
-              class="modal-img img-fluid img-thumbnail"
-              v-if="mediaSrc && mediaType === 'video'"
-              :src="mediaSrc"
-              playsinline
-              autoplay
-              muted
-              loop
-            ></video>
+  <Teleport to="body">
+    <div
+      class="modal modal-lg fade"
+      id="image-modal"
+      ref="imageModal"
+      tabindex="-1"
+      aria-labelledby="image-modal-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 id="image-modal-label" class="modal-title fs-5 text-capitalize">Upload {{ mediaType }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1"></button>
           </div>
-        </div>
-        <div class="modal-footer p-2">
-          <button type="button" class="btn btn-success me-auto" @click="processUpload()">
-            Upload <i class="fa-solid fa-upload ms-2"></i>
-          </button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <div class="modal-body text-center p-2">
+            <div class="modal-body text-center p-2">
+              <!--TODO: Add re-usable image/video component...-->
+              <img
+                v-if="mediaSrc && mediaType === 'image'"
+                :src="mediaSrc"
+                alt="Image"
+                class="modal-img img-fluid img-thumbnail"
+              />
+              <video
+                class="modal-img img-fluid img-thumbnail"
+                v-if="mediaSrc && mediaType === 'video'"
+                :src="mediaSrc"
+                playsinline
+                autoplay
+                muted
+                loop
+              ></video>
+            </div>
+          </div>
+          <div class="modal-footer p-2">
+            <button type="button" class="btn btn-success me-auto" @click="processUpload()">
+              Upload <i class="fa-solid fa-upload ms-2"></i>
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style scoped>
