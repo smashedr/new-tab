@@ -7,6 +7,7 @@ export const defaultOptions = {
   showSearch: true,
   showTopSites: true,
   numTopSites: 12,
+  reposHeight: 35,
   contextMenu: true,
   showUpdate: false,
 

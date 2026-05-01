@@ -60,7 +60,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeyboard))
   </header>
 
   <main class="flex-grow-1 overflow-auto d-flex flex-column p-1">
-    <div :style="{ height: options.githubToken ? `35% !important` : '100% !important' }">
+    <div :style="{ height: options.githubToken ? `${options.reposHeight}% !important` : '100% !important' }">
       <!--TODO: Cleanup all these nested classes and move to GitHubRepos-->
       <div class="d-flex align-items-center justify-content-center w-100 h-100 pb-3 pe-3">
         <div class="glass-outline rounded rounded-3 my-0 mx-auto w-100 h-100 d-flex flex-column">

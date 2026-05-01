@@ -151,6 +151,23 @@ function urlChange(id: string, value: string) {
         fa="fa-solid fa-t"
       />
 
+      <div>
+        <label for="reposHeight" class="form-label visually-hidden">Repos Height Percentage</label>
+        <div class="d-flex align-items-center gap-2">
+          <output for="reposHeight" class="fw-bold">{{ options.reposHeight }}</output>
+          <input
+            v-model="options.reposHeight"
+            @change="saveOptions"
+            id="reposHeight"
+            class="form-range flex-grow-1"
+            type="range"
+            step="5"
+            min="20"
+            max="80"
+          />
+        </div>
+      </div>
+
       <div class="col-6">
         <label for="githubUrl" class="form-label"><i class="fa-brands fa-github me-1"></i> GitHub URL</label>
         <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Custom GitHub URL." v-bs></i>
